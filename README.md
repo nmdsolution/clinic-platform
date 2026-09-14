@@ -34,13 +34,31 @@ docker compose up
 
 The `COMPOSE_FILE` variable tells Docker Compose to automatically include the SSL overlay, so you never need to pass `-f` flags. See the [SSL/HTTPS Configuration](#sslhttps-configuration) section for detailed setup instructions.
 
+## Architecture
+
+The codebase is organized into two top-level folders plus shared infrastructure:
+
+- **`frontend/`** — everything front-end. The OpenMRS 3 SPA assembly itself (Maven `pom.xml`,
+  `spa-assemble-config.json`, `config-core_demo.json`) plus `custom-modules/`, which holds our
+  own OpenMRS ESM micro-frontends: `esm-login-app` (custom-branded login screen) and
+  `esm-caisse-app` (cashier/billing UI). `overlay.Dockerfile` builds the published OpenMRS
+  frontend image with both custom modules layered on top.
+- **`backend/`** — everything back-end. `distro/` is the OpenMRS Initializer distribution
+  (Maven module, metadata/config for the reference app), built into an image by the top-level
+  `Dockerfile` in this folder. `services/` holds our own backend microservices, starting with
+  `caisse` (FastAPI billing/cashier API).
+- **`gateway/`**, **`monitoring/`**, **`certbot/`** — cross-cutting infrastructure (reverse
+  proxy, observability, SSL) that fronts both `frontend` and `backend` rather than belonging to
+  either. Orchestration (`docker-compose*.yml`) and the root Maven reactor (`pom.xml`) also stay
+  at the repository root since they tie every piece together.
+
 ## Overview
 
 This distribution consists of four images:
 
 - **db** - This is just the standard MariaDB image supplied to use as a database
-- **backend** - This image is the OpenMRS backend. It is built from the main Dockerfile included in the root of the project and
-  based on the core OpenMRS Docker file. Additional contents for this image are drawn from the `distro` sub-directory which
+- **backend** - This image is the OpenMRS backend. It is built from `backend/Dockerfile` and
+  based on the core OpenMRS Docker file. Additional contents for this image are drawn from the `backend/distro` sub-directory which
   includes a full Initializer configuration for the reference application intended as a starting point.
 - **frontend** - This image is a simple nginx container that embeds the 3.x frontend, including the modules described in the
   `frontend/spa-assemble-config.json` file.
@@ -256,7 +274,7 @@ If you would like to use grafana in your distro, you just need to copy over `doc
 
 This project uses the [Initializer](https://github.com/mekomsolutions/openmrs-module-initializer) module
 to configure metadata for this project. The Initializer configuration can be found in the configuration
-subfolder of the distro folder. Any files added to this will be automatically included as part of the
+subfolder of the `backend/distro` folder. Any files added to this will be automatically included as part of the
 metadata for the RefApp.
 
 Eventually, we would like to split this metadata into two packages:

@@ -28,11 +28,11 @@ jobs:
       - name: Check for release updates
         id: releases
         run: |
-          mvn -f distro/pom.xml versions:update-properties \
+          mvn -f backend/distro/pom.xml versions:update-properties \
             -DgenerateBackupPoms=false \
-            "-Dmaven.version.rules=file:///$PWD/distro/version-rules.xml"
+            "-Dmaven.version.rules=file:///$PWD/backend/distro/version-rules.xml"
 
-          if git diff --quiet distro/pom.xml; then
+          if git diff --quiet backend/distro/pom.xml; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -43,7 +43,7 @@ jobs:
       - name: Check for SNAPSHOT property updates
         id: snapshots
         run: |
-          SNAPSHOT_PROPS=$(sed -n '/<properties>/,/<\/properties>/p' distro/pom.xml \
+          SNAPSHOT_PROPS=$(sed -n '/<properties>/,/<\/properties>/p' backend/distro/pom.xml \
             | { grep -oE '<[a-zA-Z0-9._-]+>[^<]*-SNAPSHOT<' || true; } \
             | sed -E 's|<([^>]+)>.*|\1|' \
             | paste -sd, -)
@@ -55,13 +55,13 @@ jobs:
 
           echo "Scoping SNAPSHOT bump to: $SNAPSHOT_PROPS"
 
-          mvn -f distro/pom.xml versions:update-properties \
+          mvn -f backend/distro/pom.xml versions:update-properties \
             -DgenerateBackupPoms=false \
             -DallowSnapshots=true \
             "-DincludeProperties=$SNAPSHOT_PROPS" \
-            "-Dmaven.version.rules=file:///$PWD/distro/version-rules.xml"
+            "-Dmaven.version.rules=file:///$PWD/backend/distro/version-rules.xml"
 
-          if git diff --quiet distro/pom.xml; then
+          if git diff --quiet backend/distro/pom.xml; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -72,7 +72,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add distro/pom.xml
+          git add backend/distro/pom.xml
           git commit -m "Update dependency versions"
           git push
 
@@ -81,7 +81,7 @@ jobs:
       - name: Resolve SNAPSHOT dependencies
         id: resolve
         run: |
-          mvn -f distro/pom.xml dependency:resolve dependency:list \
+          mvn -f backend/distro/pom.xml dependency:resolve dependency:list \
             -U \
             -DexcludeTransitive=true \
             -DincludeScope=provided \

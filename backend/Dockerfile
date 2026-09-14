@@ -9,7 +9,7 @@ ARG MVN_COMMAND="install"
 
 # Copy build files
 COPY pom.xml ./
-COPY distro ./distro/
+COPY backend/distro ./distro/
 
 ARG CACHE_BUST
 # Build the distro, but only deploy from the amd64 build

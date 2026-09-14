@@ -223,7 +223,7 @@ jobs:
         run: |
           set -euo pipefail
           OLD_ESC=$(printf '%s' "$OLD" | sed 's/[.[\*^$]/\\&/g')
-          for f in pom.xml distro/pom.xml frontend/pom.xml; do
+          for f in pom.xml backend/distro/pom.xml frontend/pom.xml; do
             n=$(grep -c "<version>$OLD</version>" "$f" || true)
             if [ "$n" != "1" ]; then
               echo "::error::$f: expected exactly one occurrence of <version>$OLD</version>, found $n"; exit 1
@@ -234,8 +234,8 @@ jobs:
       - name: Refuse SNAPSHOT or timestamp-locked module versions
         run: |
           set -euo pipefail
-          if grep -nE '(-SNAPSHOT|[0-9]{8}\.[0-9]{6}-[0-9]+)<' distro/pom.xml; then
-            echo "::error::distro/pom.xml references SNAPSHOT or timestamp-locked module versions (shown above) — fix it on the release branch and cut a new RC."
+          if grep -nE '(-SNAPSHOT|[0-9]{8}\.[0-9]{6}-[0-9]+)<' backend/distro/pom.xml; then
+            echo "::error::backend/distro/pom.xml references SNAPSHOT or timestamp-locked module versions (shown above) — fix it on the release branch and cut a new RC."
             exit 1
           fi
 

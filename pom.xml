@@ -218,7 +218,7 @@
     <profile>
       <id>distro</id>
       <modules>
-        <module>distro</module>
+        <module>backend/distro</module>
       </modules>
     </profile>
     <profile>
