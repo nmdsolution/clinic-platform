@@ -9,7 +9,7 @@ ARG MVN_COMMAND="install"
 
 # Copy build files
 COPY pom.xml ./
-COPY backend/distro ./distro/
+COPY backend/distro ./backend/distro/
 
 ARG CACHE_BUST
 # Build the distro, but only deploy from the amd64 build
@@ -17,12 +17,12 @@ RUN --mount=type=secret,id=m2settings,target=/usr/share/maven/ref/settings-docke
     if [ "$(arch)" != "x86_64" ]; then MVN_ARGS="$MVN_ARGS -Dmaven.deploy.skip=true"; fi && \
     mvn $MVN_ARGS $MVN_COMMAND
 
-RUN cp /openmrs_distro/distro/target/sdk-distro/web/openmrs_core/openmrs.war /openmrs/distribution/openmrs_core/
+RUN cp /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_core/openmrs.war /openmrs/distribution/openmrs_core/
 
-RUN cp /openmrs_distro/distro/target/sdk-distro/web/openmrs-distro.properties /openmrs/distribution/
-RUN cp -R /openmrs_distro/distro/target/sdk-distro/web/openmrs_modules /openmrs/distribution/openmrs_modules/
-RUN cp -R /openmrs_distro/distro/target/sdk-distro/web/openmrs_owas /openmrs/distribution/openmrs_owas/
-RUN cp -R /openmrs_distro/distro/target/sdk-distro/web/openmrs_config /openmrs/distribution/openmrs_config/
+RUN cp /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs-distro.properties /openmrs/distribution/
+RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_modules /openmrs/distribution/openmrs_modules/
+RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_owas /openmrs/distribution/openmrs_owas/
+RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_config /openmrs/distribution/openmrs_config/
 
 # Clean up after copying needed artifacts
 RUN mvn $MVN_ARGS clean
