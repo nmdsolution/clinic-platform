@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch: {}
 
 concurrency:
@@ -14,7 +14,7 @@ jobs:
   deploy:
     name: Deploy to Azure VM
     runs-on: ubuntu-latest
-    environment: production
+    environment: develop
     env:
       VM_HOST: 48.217.187.71
       VM_USER: azureuser
@@ -41,9 +41,9 @@ jobs:
           echo "Deploying clinic-platform — \$(date)"
           echo "=========================================="
 
-          git fetch origin main
-          git checkout main
-          git pull --ff-only origin main
+          git fetch origin develop
+          git checkout develop
+          git pull --ff-only origin develop
 
           docker compose pull
           docker compose build
