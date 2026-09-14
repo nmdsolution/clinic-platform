@@ -1,15 +1,22 @@
 services:
   gateway:
-    image: openmrs/openmrs-reference-application-3-gateway:${TAG:-qa}
+    build:
+      context: ./gateway
     restart: "unless-stopped"
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
     ports:
       - "80:80"
 
   frontend:
-    image: openmrs/openmrs-reference-application-3-frontend:${TAG:-qa}
+    build:
+      context: ./frontend-modules/esm-caisse-app
+      dockerfile: overlay.Dockerfile
+      args:
+        BASE_FRONTEND_TAG: ${TAG:-3.7.1}
     restart: "unless-stopped"
     environment:
       SPA_PATH: /openmrs/spa
@@ -20,13 +27,15 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       timeout: 5s
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   backend:
     image: openmrs/openmrs-reference-application-3-backend:${TAG:-qa}
     restart: "unless-stopped"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       OMRS_CONFIG_MODULE_WEB_ADMIN: "true"
       OMRS_CONFIG_AUTO_UPDATE_DATABASE: "true"
@@ -37,9 +46,42 @@ services:
       OMRS_CONFIG_CONNECTION_PASSWORD: ${OMRS_DB_PASSWORD:-openmrs}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/openmrs"]
+      interval: 15s
       timeout: 5s
+      retries: 5
+      start_period: 8m
     volumes:
       - openmrs-data:/openmrs/data
+
+  # Module Caisse & Facturation (Clinique FACE) - microservice Python
+  caisse:
+    build:
+      context: ./services/caisse
+    restart: "unless-stopped"
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    environment:
+      CAISSE_DB_HOST: db
+      CAISSE_DB_NAME: face_caisse
+      CAISSE_DB_USER: ${OMRS_DB_USER:-openmrs}
+      CAISSE_DB_PASSWORD: ${OMRS_DB_PASSWORD:-openmrs}
+      CAISSE_DB_ROOT_USER: root
+      CAISSE_DB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-openmrs}
+      CAISSE_JWT_SECRET: ${CAISSE_JWT_SECRET:-changeme-en-production-avec-une-vraie-cle-secrete}
+      CAISSE_ADMIN_USERNAME: ${CAISSE_ADMIN_USERNAME:-admin}
+      CAISSE_ADMIN_PASSWORD: ${CAISSE_ADMIN_PASSWORD:-ChangeMoi123!}
+      CAISSE_OPENMRS_BASE_URL: http://backend:8080/openmrs
+      CAISSE_OPENMRS_USERNAME: ${OPENMRS_ADMIN_USERNAME:-admin}
+      CAISSE_OPENMRS_PASSWORD: ${OPENMRS_ADMIN_PASSWORD:-Admin123}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 3s
+      start_period: 15s
+      retries: 5
 
   # MariaDB
   db:

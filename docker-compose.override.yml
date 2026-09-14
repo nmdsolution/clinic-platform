@@ -7,7 +7,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/overlay.Dockerfile
 
   backend:
     build:

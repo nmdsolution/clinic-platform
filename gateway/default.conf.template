@@ -73,6 +73,16 @@ server {
     set $backend http://backend:8080;
     proxy_read_timeout 300s;
     proxy_pass $backend;
+    # Le backend scope son cookie de session à /openmrs ; on l'élargit à tout
+    # le site pour que le module Caisse (/caisse/) puisse le voir aussi et
+    # authentifier via la session OpenMRS déjà ouverte (SSO), sans second login.
+    proxy_cookie_path /openmrs /;
+  }
+
+  location /caisse/ {
+    set $caisse http://caisse:8000;
+    rewrite ^/caisse/(.*) /$1 break;
+    proxy_pass $caisse;
   }
 
   location /grafana {

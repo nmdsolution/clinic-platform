@@ -1,0 +1,480 @@
+// Matches the "Clinic FACE" login mockup (claude.ai/design "OpenMRS Home Area" project)
+// as closely as CSS + Carbon's real form components allow. The mockup is a fixed
+// 1120x660 canvas; here the card is fluid and the illustration panel drops out below
+// ~880px so the form stays usable on tablets/phones, which the static mockup didn't
+// need to account for.
+
+:root {
+  --brand-90: #002d2d;
+  --brand-80: #003d3d;
+  --brand-70: #004144;
+  --brand-60: #005d5d;
+  --brand-50: #007d79;
+  --brand-40: #3fa39c;
+  --brand-20: #9ed8d3;
+  --brand-10: #e2f1f0;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, #eaf5f4 0%, #dff0ef 45%, #cfe8f3 100%);
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+}
+
+.pageWithImage {
+  background-image: var(--login-bg-image);
+  background-size: cover;
+  background-position: center;
+}
+
+.pageWithColor {
+  background-color: var(--login-bg-color);
+  background-image: none;
+}
+
+.bgBlobA,
+.bgBlobB,
+.bgRing {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.bgBlobA {
+  width: 520px;
+  height: 520px;
+  background: rgba(63, 163, 156, 0.14);
+  top: -160px;
+  left: -120px;
+}
+
+.bgBlobB {
+  width: 380px;
+  height: 380px;
+  background: rgba(0, 93, 93, 0.08);
+  bottom: -130px;
+  right: -90px;
+}
+
+.bgRing {
+  width: 150px;
+  height: 150px;
+  border: 1px solid rgba(0, 93, 93, 0.14);
+  top: 120px;
+  right: 180px;
+  display: none;
+
+  @media (min-width: 1200px) {
+    display: block;
+  }
+}
+
+.announcements {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(0, 45, 45, 0.14);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+
+  @media (max-width: 880px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.illustrationPanel {
+  position: relative;
+  background: linear-gradient(160deg, #e2f1f0 0%, #c9e7e4 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 44px;
+  overflow: hidden;
+  min-height: 420px;
+
+  @media (max-width: 880px) {
+    display: none;
+  }
+}
+
+.illustrationBlobA,
+.illustrationBlobB {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.illustrationBlobA {
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.5);
+  top: -70px;
+  left: -60px;
+}
+
+.illustrationBlobB {
+  width: 120px;
+  height: 120px;
+  background: rgba(63, 163, 156, 0.22);
+  bottom: 60px;
+  left: -30px;
+}
+
+.illustrationText {
+  position: relative;
+}
+
+.illustrationHeading {
+  font-size: 44px;
+  font-weight: 600;
+  color: var(--brand-90);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.illustrationSubtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--brand-70);
+  margin-top: 14px;
+  max-width: 300px;
+}
+
+.illustrationImageWrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 260px;
+  margin: 0 -20px -48px;
+}
+
+.illustrationCard {
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 12px 32px rgba(0, 45, 45, 0.18);
+  padding: 16px 20px 0;
+  max-width: 300px;
+}
+
+.illustrationImage {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+.formPanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 64px 32px;
+
+  @media (max-width: 560px) {
+    padding: 32px 24px 24px;
+  }
+}
+
+.localeRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.localePill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 30px 0 12px;
+  border-radius: 999px;
+  background: #f4f4f4;
+  font-size: 13px;
+  color: #525252;
+  transition: background 0.15s, box-shadow 0.15s;
+
+  &:has(.localeSelect:focus-visible) {
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 125, 121, 0.16);
+  }
+
+  &:has(.localeSelect:disabled) {
+    opacity: 0.6;
+  }
+
+  > svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+.localeSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.formBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 34px;
+}
+
+.brandIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--brand-60);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.brandWordmark {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--brand-80);
+  letter-spacing: -0.2px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #525252;
+  margin-bottom: 8px;
+}
+
+.field {
+  height: 50px;
+  background: #f4f4f4;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  margin-bottom: 20px;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+
+  &:focus-within {
+    background: #ffffff;
+    border-color: var(--brand-50);
+    box-shadow: 0 0 0 4px rgba(0, 125, 121, 0.13);
+  }
+
+  :global(.cds--form-item) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.cds--text-input__field-outer-wrapper),
+  :global(.cds--text-input__field-wrapper),
+  :global(.cds--text-input__field-wrapper--input) {
+    background: transparent;
+  }
+
+  :global(.cds--text-input),
+  :global(.cds--password-input) {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    height: 100%;
+    padding: 0;
+    font-size: 15px;
+    block-size: auto;
+  }
+
+  :global(.cds--text-input--password__visibility) {
+    background: transparent;
+    border: none;
+  }
+
+  :global(.cds--form-requirement) {
+    margin-top: 4px;
+  }
+}
+
+.fieldIcon {
+  flex: none;
+  color: #8d8d8d;
+}
+
+.rowBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  :global(.cds--checkbox-label) {
+    font-size: 13px;
+    color: #525252;
+  }
+}
+
+.forgotLink {
+  font-size: 13px;
+  color: var(--brand-60);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--brand-70);
+    text-decoration: underline;
+  }
+}
+
+.btnPrimary {
+  width: 100%;
+  height: 50px;
+  background: var(--brand-60);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  font: 500 15px 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 93, 93, 0.22);
+  transition: background 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background: var(--brand-70);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btnSecondary {
+  width: 100%;
+  height: 50px;
+  margin-top: 12px;
+  background: #ffffff;
+  color: #161616;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  font: 500 15px 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  &:hover:not(:disabled) {
+    background: #f4f4f4;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.dividerText {
+  font-size: 12px;
+  color: #a8a8a8;
+}
+
+.loader {
+  min-height: fit-content;
+
+  :global(.cds--inline-loading__text) {
+    color: #ffffff;
+  }
+}
+
+.errorMessage {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.versionText {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #a8a8a8;
+}
+
+.footerText {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: #a8a8a8;
+}
+
+// Keep password field in DOM for browser autofill when the two-step
+// (username-then-password) login flow is enabled.
+.hiddenPasswordField {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+}

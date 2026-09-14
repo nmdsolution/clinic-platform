@@ -1,0 +1,114 @@
+.bodyLong01 {
+  font-size: 14px; font-weight: 400; line-height: 1.42857; letter-spacing: 0.16px;
+}
+
+.productiveHeading03 {
+  font-size: 20px; font-weight: 400; line-height: 1.4; letter-spacing: 0;
+}
+
+.backButton {
+  height: 48px;
+  padding-left: 0;
+
+  svg {
+    margin-right: 8px;
+    order: 1;
+  }
+
+  span {
+    order: 2;
+  }
+}
+
+.locationPickerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.paddedContainer {
+  padding: 24px 24px 16px;
+}
+
+.locationCard {
+  display: flex;
+  flex-direction: column;
+  width: 23rem;
+  background-color: #ffffff;
+  margin: 0;
+  border: 1px solid #e0e0e0;
+}
+
+.welcomeTitle {
+  @extend .productiveHeading03;
+  text-transform: capitalize;
+}
+
+.welcomeMessage {
+  @extend .bodyLong01;
+  margin-top: 8px;
+  color: #525252;
+}
+
+.footerContainer {
+  padding: 16px 24px 24px;
+
+  .savePreferenceCheckbox {
+    padding-bottom: 16px !important;
+  }
+
+  .confirmButton {
+    width: 100%;
+  }
+}
+
+.cancelButton {
+  margin-top: 4px;
+}
+
+.loadingContainer {
+  margin-top: 24px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 24px auto 0;
+}
+
+.loader {
+  min-height: fit-content;
+}
+
+.errorNotification {
+  margin-inline-start: -24px;
+  margin-inline-end: -24px;
+}
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.emptyStateIcon {
+  color: #525252;
+  margin-bottom: 8px;
+}
+
+.emptyStateTitle {
+  @extend .bodyLong01;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.emptyStateMessage {
+  @extend .bodyLong01;
+  color: #525252;
+}

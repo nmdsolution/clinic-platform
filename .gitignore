@@ -10,3 +10,7 @@ CLAUDE.md
 .cursor/
 .aider*
 .clinerules
+
+# Python
+__pycache__/
+*.pyc

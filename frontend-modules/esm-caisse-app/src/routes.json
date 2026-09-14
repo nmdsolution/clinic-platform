@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.openmrs.org/routes.schema.json",
+  "backendDependencies": {
+    "webservices.rest": ">=2.2.0"
+  },
+  "pages": [
+    {
+      "component": "root",
+      "route": "caisse"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "caisse-menu-link",
+      "component": "caisseMenuLink",
+      "slot": "app-menu-slot",
+      "online": true,
+      "offline": false
+    }
+  ]
+}

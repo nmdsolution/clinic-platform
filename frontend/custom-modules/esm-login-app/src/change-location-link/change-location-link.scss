@@ -1,0 +1,15 @@
+.changeLocationButton {
+  width: fit-content;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  padding: 12px !important; // this gets unset in rtl language without !important
+
+  &:hover {
+    color: white;
+  }
+}
+
+.currentLocationText {
+  padding-inline: 12px;
+}
