@@ -1,0 +1,76 @@
+{
+  "name": "Suivi Hypertension",
+  "description": "Visite de suivi d'un patient inscrit au programme Hypertension (protocole Clinique Fasse §21). Le poids et la tension artérielle restent saisis via le widget natif « Signes vitaux et biométrie » du dossier patient, pas dans ce formulaire.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Suivi de programme chronique",
+  "pages": [
+    {
+      "label": "Suivi Hypertension",
+      "sections": [
+        {
+          "label": "Bilan biologique et examens",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Créatinine (mg/L)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1404cca8-7fe1-48a7-aa2d-f4cbd036a049",
+                "min": "0",
+                "max": "300"
+              },
+              "id": "creatinine"
+            },
+            {
+              "label": "Ionogramme",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "a3e4d4a8-5aa0-4106-8689-e2ec6566fb3d"
+              },
+              "id": "ionogramme"
+            },
+            {
+              "label": "Résultat ECG",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "aea99614-e896-4b1b-916e-744913689c88"
+              },
+              "id": "ecgResultat"
+            },
+            {
+              "label": "Résultat MAPA",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "ad458a99-ff88-405e-8e60-39a797b2f653"
+              },
+              "id": "mapaResultat"
+            }
+          ]
+        },
+        {
+          "label": "Traitement",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Traitement",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "f08d88da-c570-4fa7-88e4-ffd4170dc22e"
+              },
+              "id": "traitement"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "processor": "EncounterFormProcessor",
+  "referencedForms": []
+}

@@ -1,2 +1,3 @@
 "Uuid","Void/Retire","Name","Description","View privilege","Edit privilege","_order:1000"
 "","","Consultation médicale","Consultation médicale complète : motif, anamnèse, examen clinique, conduite à tenir (protocole Clinique FACE §8).","","",""
+"","","Suivi de programme chronique","Visite de suivi d'un patient inscrit à un programme chronique (diabète, hypertension...) (protocole Clinique FACE §21).","","",""
