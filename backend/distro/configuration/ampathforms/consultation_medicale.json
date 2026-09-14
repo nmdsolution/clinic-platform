@@ -1,0 +1,198 @@
+{
+  "name": "Consultation médicale",
+  "description": "Formulaire de consultation médicale : motif, anamnèse, examen clinique, constantes complémentaires et conduite à tenir (protocole Clinique FACE §8). Le diagnostic codé est saisi via le widget natif « Notes de visite / Diagnostics » du dossier patient.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Consultation médicale",
+  "pages": [
+    {
+      "label": "Motif et anamnèse",
+      "sections": [
+        {
+          "label": "Motif de consultation",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Motif de consultation",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "d322b96b-a19b-4212-8295-7b5934f9ada9"
+              },
+              "id": "motif"
+            }
+          ]
+        },
+        {
+          "label": "Anamnèse",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Anamnèse (histoire de la maladie)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "99ca2aa1-566e-4441-a02d-8a38b9f910cb"
+              },
+              "id": "anamnese"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Examen clinique",
+      "sections": [
+        {
+          "label": "Examen clinique par système",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "État général",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "33621d82-f59b-4ad1-b3ea-a2a40fb93243" },
+              "id": "exEtatGeneral"
+            },
+            {
+              "label": "Cardiovasculaire",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "fe3c26cb-a44d-42b4-90ed-3d66fefb4281" },
+              "id": "exCardiovasculaire"
+            },
+            {
+              "label": "Respiratoire",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "2fed6e7d-23a3-4e9f-a27d-906f319faef4" },
+              "id": "exRespiratoire"
+            },
+            {
+              "label": "Digestif",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "7ef1c693-ce7d-449a-92a6-6fdeb1cd7c81" },
+              "id": "exDigestif"
+            },
+            {
+              "label": "Neurologique",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "50ad4205-f324-44d3-a37d-2288fe68405a" },
+              "id": "exNeurologique"
+            },
+            {
+              "label": "Locomoteur",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "d776bd17-f3fc-494c-8eaf-0bec204ea340" },
+              "id": "exLocomoteur"
+            },
+            {
+              "label": "ORL",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "49893994-5583-46dd-9e86-1435b21ac7b8" },
+              "id": "exOrl"
+            },
+            {
+              "label": "Dermatologique",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "bf9f481b-b553-4b0a-a029-fdffe50271cc" },
+              "id": "exDermatologique"
+            },
+            {
+              "label": "Gynécologique",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "4e2c4f67-75ce-449a-9a82-775525296bb6" },
+              "id": "exGynecologique"
+            },
+            {
+              "label": "Autres",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "113b0187-490e-43ee-b5a2-cb233b0f1a60" },
+              "id": "exAutres"
+            }
+          ]
+        },
+        {
+          "label": "Constantes complémentaires",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Glycémie capillaire (g/L)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "75775083-fa7d-4c2a-882a-6fcb27d186e0",
+                "min": "0",
+                "max": "6"
+              },
+              "id": "glycemieCapillaire"
+            },
+            {
+              "label": "Périmètre abdominal (cm)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "7efad583-29a9-4b55-91ce-372a3f88379d",
+                "min": "0",
+                "max": "200"
+              },
+              "id": "perimetreAbdominal"
+            },
+            {
+              "label": "Douleur (EVA /10)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "3c8e71bf-49fb-4400-ad70-115fb0347d66",
+                "min": "0",
+                "max": "10"
+              },
+              "id": "douleurEva"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Conduite à tenir",
+      "sections": [
+        {
+          "label": "Conduite à tenir",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Traitement",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "f08d88da-c570-4fa7-88e4-ffd4170dc22e" },
+              "id": "catTraitement"
+            },
+            {
+              "label": "Examens complémentaires",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "3b12d14f-b29f-473b-82cd-c587224a2bd1" },
+              "id": "catExamens"
+            },
+            {
+              "label": "Orientation",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "97a4e9c2-5a50-43e2-a466-ef1996e1e2a5" },
+              "id": "catOrientation"
+            },
+            {
+              "label": "Surveillance",
+              "type": "obs",
+              "questionOptions": { "rendering": "textarea", "concept": "7cd2ebc5-bbcf-4ba6-b2da-e03d818c784c" },
+              "id": "catSurveillance"
+            },
+            {
+              "label": "Date de contrôle",
+              "type": "obs",
+              "questionOptions": { "rendering": "date", "concept": "ea1bb666-e84d-45f3-893e-98680f437f01" },
+              "id": "catDateControle"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "processor": "EncounterFormProcessor",
+  "referencedForms": []
+}

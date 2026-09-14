@@ -1,6 +1,6 @@
 # Builds the Caisse module and the custom-branded Clinic FACE login module, then overlays both
 # on top of the officially published OpenMRS 3 frontend image - same technique as
-# frontend-modules/esm-caisse-app/overlay.Dockerfile (patch importmap.json + routes.registry.json,
+# frontend/custom-modules/esm-caisse-app/overlay.Dockerfile (patch importmap.json + routes.registry.json,
 # copy the module's dist/ in), extended here to also replace the stock login screen.
 #
 # Build context for this Dockerfile is the repository root (see docker-compose.override.yml),
@@ -10,11 +10,11 @@ ARG BASE_FRONTEND_TAG=3.7.1
 
 FROM node:20-alpine AS build-caisse
 WORKDIR /app
-COPY frontend-modules/esm-caisse-app/package.json ./
+COPY frontend/custom-modules/esm-caisse-app/package.json ./
 RUN npm install --legacy-peer-deps
-COPY frontend-modules/esm-caisse-app/tsconfig.json frontend-modules/esm-caisse-app/rspack.config.js ./
-COPY frontend-modules/esm-caisse-app/src ./src
-COPY frontend-modules/esm-caisse-app/translations ./translations
+COPY frontend/custom-modules/esm-caisse-app/tsconfig.json frontend/custom-modules/esm-caisse-app/rspack.config.js ./
+COPY frontend/custom-modules/esm-caisse-app/src ./src
+COPY frontend/custom-modules/esm-caisse-app/translations ./translations
 RUN npm run build
 
 FROM node:20-alpine AS build-login

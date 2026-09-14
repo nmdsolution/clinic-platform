@@ -13,7 +13,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend-modules/esm-caisse-app
+      context: ./frontend/custom-modules/esm-caisse-app
       dockerfile: overlay.Dockerfile
       args:
         BASE_FRONTEND_TAG: ${TAG:-3.7.1}
@@ -56,7 +56,7 @@ services:
   # Module Caisse & Facturation (Clinique FACE) - microservice Python
   caisse:
     build:
-      context: ./services/caisse
+      context: ./backend/services/caisse
     restart: "unless-stopped"
     depends_on:
       db:
