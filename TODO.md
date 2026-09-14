@@ -49,10 +49,30 @@ Legacy admin + O3) :
     utiliser le widget natif "Notes de visite / Diagnostics" du dossier
     patient (déjà fourni par O3), qui code proprement via CIEL/ICD-10
     plutôt qu'un champ texte libre
-  - ⚠️ Pas encore testé sur une instance déployée — nécessite
-    `docker compose build backend && docker compose up` puis vérifier
-    dans "Gérer les formulaires" que le formulaire apparaît et se lance
-    correctement depuis le dossier patient
+  - ✅ Testé sur l'instance déployée (2026-09-14) : le formulaire
+    "Consultation médicale" apparaît dans "Manage Forms", publié
+
+⚠️ **Piège opérationnel à connaître pour tout futur changement dans
+`backend/distro/configuration/`** : le service `backend` monte un volume
+Docker nommé persistant (`openmrs-data:/openmrs/data`, voir
+`docker-compose.yml`). L'image ne resynchronise PAS automatiquement son
+`openmrs_config` embarqué vers `/openmrs/data/configuration` sur un
+volume déjà initialisé — seul un premier démarrage sur volume vide le
+fait. Résultat : un nouveau/modifié fichier Initializer déployé via CI
+n'est pas pris en compte tant qu'il n'est pas copié manuellement dans le
+volume vivant. Contournement utilisé le 2026-09-14 :
+```bash
+cd /opt/clinic-platform
+BACKEND=$(docker ps -qf "name=backend")
+docker exec $BACKEND mkdir -p /openmrs/data/configuration/<domaine>
+docker cp backend/distro/configuration/<domaine>/<fichier> $BACKEND:/openmrs/data/configuration/<domaine>/<fichier>
+docker restart $BACKEND
+```
+À corriger durablement (TODO) : faire en sorte que le déploiement
+resynchronise `backend/distro/configuration/` vers le volume à chaque
+déploiement (étape dans le workflow CI, ou script d'entrée custom),
+sinon ce geste manuel sera nécessaire à chaque changement de
+configuration Initializer.
 - 🚧 **§9 Prescription médicamenteuse** — module Orders/Drug Orders natif
   OpenMRS ; à vérifier si activé et si le catalogue de médicaments
   (Concepts → Manage Concept Drugs) est renseigné
@@ -74,9 +94,29 @@ Legacy admin + O3) :
 - 🚧 **§19-20 Rendez-vous et agenda** — module natif "Rendez-vous"
   (Appointment Scheduling) visible dans la nav, en plus du service
   caisse déjà en place
-- 🚧 **§21 Dossier patient chronique** — module "Programmes" ("Gérer
-  Programmes") + Cohort Builder permettent l'inscription et le suivi de
-  patients à un programme (diabète, HTA...) ; à configurer
+- ✅ **§21 Dossier patient chronique** — configuré via Initializer dans
+  `backend/distro/configuration/` :
+  - `encountertypes/encountertypes.csv` : type d'encounter "Suivi de
+    programme chronique" (ajouté à côté de "Consultation médicale")
+  - `concepts/chronic_programs_concepts.csv` : 2 concepts "Program"
+    (Diabète, Hypertension) + 8 concepts cliniques (HbA1c, créatinine,
+    albuminurie, fond d'œil, contrôle des pieds, ionogramme, résultat
+    ECG, résultat MAPA) — poids/TA restent sur le widget natif Vitals,
+    glycémie capillaire et traitement réutilisent les concepts déjà
+    créés pour la Consultation médicale (§7-8)
+  - `programs/chronic_programs.csv` : "Programme Diabète" et "Programme
+    Hypertension", inscriptibles/consultables via le module Programs
+    natif (Administration → Gérer Programmes) et Cohort Builder
+  - `ampathforms/suivi_diabete.json` et `ampathforms/suivi_hypertension.json` :
+    formulaires de visite de suivi correspondants
+  - ⚠️ Pas encore testé sur l'instance déployée — nécessite le même
+    geste que pour §7-8 : `docker cp` des 3 nouveaux domaines
+    (`concepts`, `programs`, et le fichier `encountertypes.csv` mis à
+    jour) vers `/openmrs/data/configuration/` sur le volume, puis
+    `docker restart` du backend (voir la note sur le volume plus bas)
+  - Non couvert pour l'instant : workflows/états de programme (ex.
+    "actif" / "perdu de vue" / "transféré" / "décédé") — l'inscription
+    simple avec dates suffit pour une première version
 - ⬜ **§22 Module Personnel** (fiche administrative salarié) — aucun
   équivalent RH dans OpenMRS ; à construire (hors périmètre clinique)
 - ⬜ **§23 Pointage et présence du personnel** — à construire

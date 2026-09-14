@@ -1,0 +1,104 @@
+{
+  "name": "Suivi Diabète",
+  "description": "Visite de suivi d'un patient inscrit au programme Diabète (protocole Clinique Fasse §21). Le poids et la tension artérielle restent saisis via le widget natif « Signes vitaux et biométrie » du dossier patient, pas dans ce formulaire.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Suivi de programme chronique",
+  "pages": [
+    {
+      "label": "Suivi Diabète",
+      "sections": [
+        {
+          "label": "Bilan biologique",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "HbA1c (%)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "2aba8565-b971-4dcb-82ad-5fd469fed60b",
+                "min": "3",
+                "max": "20"
+              },
+              "id": "hba1c"
+            },
+            {
+              "label": "Glycémie capillaire (g/L)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "75775083-fa7d-4c2a-882a-6fcb27d186e0",
+                "min": "0",
+                "max": "6"
+              },
+              "id": "glycemieCapillaire"
+            },
+            {
+              "label": "Créatinine (mg/L)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1404cca8-7fe1-48a7-aa2d-f4cbd036a049",
+                "min": "0",
+                "max": "300"
+              },
+              "id": "creatinine"
+            },
+            {
+              "label": "Albuminurie",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "fce262df-6bdf-4804-a7d3-ed77e280fd20"
+              },
+              "id": "albuminurie"
+            }
+          ]
+        },
+        {
+          "label": "Examen spécifique",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Fond d'œil",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "4bcc4cdf-21f9-4127-8bfe-bbe440d2ff6e"
+              },
+              "id": "fondOeil"
+            },
+            {
+              "label": "Contrôle des pieds",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "e45d6947-b5ed-4f9b-a5f6-233ae2b90945"
+              },
+              "id": "controlePieds"
+            }
+          ]
+        },
+        {
+          "label": "Traitement",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Traitement",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "f08d88da-c570-4fa7-88e4-ffd4170dc22e"
+              },
+              "id": "traitement"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "processor": "EncounterFormProcessor",
+  "referencedForms": []
+}
