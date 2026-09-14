@@ -1,0 +1,77 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Azure VM
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VM_HOST: ${{ vars.AZURE_VM_HOST || '48.217.187.71' }}
+      VM_USER: ${{ secrets.AZURE_VM_USER }}
+      DEPLOY_PATH: ${{ vars.AZURE_VM_DEPLOY_PATH || '/opt/clinic-platform' }}
+
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AZURE_VM_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$VM_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=30 \
+            "$VM_USER@$VM_HOST" << DEPLOY
+          set -e
+          cd "$DEPLOY_PATH"
+
+          echo "=========================================="
+          echo "Deploying clinic-platform — \$(date)"
+          echo "=========================================="
+
+          git fetch origin main
+          git checkout main
+          git pull --ff-only origin main
+
+          docker compose pull
+          docker compose build
+          docker compose up -d --remove-orphans
+
+          echo "Waiting for backend to be ready..."
+          for i in \$(seq 1 20); do
+            if docker compose exec -T backend curl -sf http://localhost:8080/openmrs > /dev/null 2>&1; then
+              echo "Backend is ready (attempt \$i)"
+              break
+            fi
+            echo "  attempt \$i/20 — waiting 15s..."
+            sleep 15
+            if [ "\$i" -eq 20 ]; then
+              echo "ERREUR : backend not ready after 5 minutes"
+              docker compose logs backend --tail=50
+              exit 1
+            fi
+          done
+
+          docker compose ps
+          docker image prune -f
+
+          echo "=========================================="
+          echo "Deployment completed!"
+          echo "=========================================="
+          DEPLOY
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
