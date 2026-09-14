@@ -5,6 +5,7 @@
     <groupId>org.openmrs</groupId>
     <artifactId>distro-emr</artifactId>
     <version>3.7.1</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>distro-emr-configuration</artifactId>
