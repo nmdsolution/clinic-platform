@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      VM_HOST: ${{ vars.AZURE_VM_HOST || '48.217.187.71' }}
-      VM_USER: ${{ secrets.AZURE_VM_USER }}
-      DEPLOY_PATH: ${{ vars.AZURE_VM_DEPLOY_PATH || '/opt/clinic-platform' }}
+      VM_HOST: 48.217.187.71
+      VM_USER: azureuser
+      DEPLOY_PATH: /opt/clinic-platform
 
     steps:
       - name: Configure SSH
