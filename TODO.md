@@ -73,12 +73,30 @@ resynchronise `backend/distro/configuration/` vers le volume à chaque
 déploiement (étape dans le workflow CI, ou script d'entrée custom),
 sinon ce geste manuel sera nécessaire à chaque changement de
 configuration Initializer.
-- 🚧 **§9 Prescription médicamenteuse** — module Orders/Drug Orders natif
-  OpenMRS ; à vérifier si activé et si le catalogue de médicaments
-  (Concepts → Manage Concept Drugs) est renseigné
-- 🚧 **§10 Module Pharmacie** — "Gérer le Stock" / "Gestion des Stocks"
-  déjà dans le menu admin ; à configurer (produits, seuils d'alerte,
-  péremption) plutôt qu'à développer
+- ✅ **§9 Prescription médicamenteuse (catalogue de démo)** — configuré
+  via Initializer :
+  - `concepts/pharmacy_demo_concepts.csv` : 5 formes galéniques
+    (comprimé, sirop, injectable, sachet, suspension buvable) + 11
+    molécules (Amoxicilline, Paracétamol, Paracétamol pédiatrique,
+    Ibuprofène, Artéméther/Luméfantrine, Métronidazole, Ciprofloxacine,
+    Oméprazole, SRO, Fer + Acide folique, Diclofénac)
+  - `drugs/pharmacy_demo_drugs.csv` : 11 présentations de médicaments
+    prescriptibles (nom, forme, dosage) — catalogue **de démonstration**,
+    à remplacer par le vrai formulaire de la pharmacie avant mise en
+    production réelle
+  - ⚠️ Pas encore testé sur l'instance déployée — même geste `docker cp`
+    + `docker restart` que pour les modules précédents
+  - ⚠️ Les prix (achat/vente) ne sont pas dans ce catalogue — à ajouter
+    séparément (Concept Drug ne porte pas de prix ; ça se gère plutôt
+    via "Gérer les services facturables" / le service caisse)
+- 🚧 **§10 Module Pharmacie (stock)** — "Gérer le Stock" / "Gestion des
+  Stocks" (module Stock Management) déjà dans le menu admin et déjà
+  dans le distro (`stockmanagement-omod`) ; **non couvert par
+  Initializer** (pas de domaine dédié) — les stocks, seuils d'alerte et
+  péremptions doivent être saisis directement dans l'UI "Gestion des
+  Stocks" une fois le catalogue de médicaments ci-dessus chargé,
+  puisque ce sont des données d'exploitation (quantités réelles) et non
+  des métadonnées versionnables
 - 🚧 **§11-12 Prescription d'examens / Laboratoire** — onglet "Laboratoire"
   déjà présent dans la nav principale ; à vérifier le workflow
   prescrit → prélevé → résultat disponible → validé
@@ -109,11 +127,11 @@ configuration Initializer.
     natif (Administration → Gérer Programmes) et Cohort Builder
   - `ampathforms/suivi_diabete.json` et `ampathforms/suivi_hypertension.json` :
     formulaires de visite de suivi correspondants
-  - ⚠️ Pas encore testé sur l'instance déployée — nécessite le même
-    geste que pour §7-8 : `docker cp` des 3 nouveaux domaines
-    (`concepts`, `programs`, et le fichier `encountertypes.csv` mis à
-    jour) vers `/openmrs/data/configuration/` sur le volume, puis
-    `docker restart` du backend (voir la note sur le volume plus bas)
+  - ✅ Testé sur l'instance déployée (2026-09-15) : inscription du
+    patient au "Programme Diabète" confirmée (statut Actif), formulaire
+    "Suivi Diabète" ouvert et enregistré avec succès depuis
+    "Formulaires cliniques" (et non "Actions" — voir correction de
+    navigation ci-dessous)
   - Non couvert pour l'instant : workflows/états de programme (ex.
     "actif" / "perdu de vue" / "transféré" / "décédé") — l'inscription
     simple avec dates suffit pour une première version
