@@ -84,8 +84,10 @@ configuration Initializer.
     prescriptibles (nom, forme, dosage) — catalogue **de démonstration**,
     à remplacer par le vrai formulaire de la pharmacie avant mise en
     production réelle
-  - ⚠️ Pas encore testé sur l'instance déployée — même geste `docker cp`
-    + `docker restart` que pour les modules précédents
+  - ✅ Testé sur l'instance déployée (2026-09-16) : "Amoxicilline 1g
+    comprimé (clinique fasse)" apparaît bien dans la recherche de
+    médicaments lors de la prescription, aux côtés du catalogue déjà
+    présent (Amoxicillin 250mg/500mg, Augmentin, Bactoclav...)
   - ⚠️ Les prix (achat/vente) ne sont pas dans ce catalogue — à ajouter
     séparément (Concept Drug ne porte pas de prix ; ça se gère plutôt
     via "Gérer les services facturables" / le service caisse)
