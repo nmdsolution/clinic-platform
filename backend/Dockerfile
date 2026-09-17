@@ -7,6 +7,18 @@ WORKDIR /openmrs_distro
 ARG MVN_ARGS="-s /usr/share/maven/ref/settings-docker.xml -U -P distro"
 ARG MVN_COMMAND="install"
 
+# Build a patched stockmanagement module: the released 3.0.0 has a dead
+# StockOperationDTOValidator, so atLocationUuid is never set and every
+# stock operation (Receipt, Opening Stock...) fails with
+# "Column 'at_location_id' cannot be null". Fix proposed upstream but not
+# yet released: https://github.com/openmrs/openmrs-module-stockmanagement/pull/47
+RUN --mount=type=secret,id=m2settings,target=/usr/share/maven/ref/settings-docker.xml \
+    git clone https://github.com/ebouJ/openmrs-module-stockmanagement.git /tmp/stockmanagement-fix && \
+    cd /tmp/stockmanagement-fix && \
+    git checkout 890c93736e591fc3a4fb9977ae260de7b9b371b7 && \
+    mvn -s /usr/share/maven/ref/settings-docker.xml -DskipTests install && \
+    cd / && rm -rf /tmp/stockmanagement-fix
+
 # Copy build files
 COPY pom.xml ./
 COPY backend/distro ./backend/distro/
