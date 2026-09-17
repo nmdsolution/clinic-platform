@@ -91,17 +91,77 @@ configuration Initializer.
   - ⚠️ Les prix (achat/vente) ne sont pas dans ce catalogue — à ajouter
     séparément (Concept Drug ne porte pas de prix ; ça se gère plutôt
     via "Gérer les services facturables" / le service caisse)
-- 🚧 **§10 Module Pharmacie (stock)** — "Gérer le Stock" / "Gestion des
-  Stocks" (module Stock Management) déjà dans le menu admin et déjà
-  dans le distro (`stockmanagement-omod`) ; **non couvert par
-  Initializer** (pas de domaine dédié) — les stocks, seuils d'alerte et
-  péremptions doivent être saisis directement dans l'UI "Gestion des
-  Stocks" une fois le catalogue de médicaments ci-dessus chargé,
-  puisque ce sont des données d'exploitation (quantités réelles) et non
-  des métadonnées versionnables
+- ✅ **§10 Module Pharmacie (stock)** — "Gérer le Stock" / "Gestion des
+  Stocks" (module Stock Management), **non couvert par Initializer**
+  (pas de domaine dédié) — géré directement dans l'UI, données
+  d'exploitation non versionnables
+  - ✅ Les 11 articles du catalogue de démo (§9) ont été créés dans
+    "Gestion des Stocks" (2026-09-16), via un import CSV positionnel
+    (16 colonnes : DRUG_ID, DISPENSING_UNIT/PUOM = concept_id de la
+    forme galénique, PACK_SIZE=1, fournisseur "Fasse store", seuil de
+    réapprovisionnement 20) — le fichier `stock_items_import.csv` est
+    à la racine du repo (non commité, c'est un utilitaire ponctuel, pas
+    une config versionnée)
+  - ✅ **Résolu (2026-09-17) : opérations de stock (Receipt, Opening
+    Stock...) fonctionnelles**, après un parcours de débogage en
+    plusieurs étapes sur `openmrs-module-stockmanagement` 3.0.0 /
+    `esm-stock-management-app` 3.2.1 :
+    1. **Bug "permanent" NPE** sur la création d'un "User role scope" :
+       `NullPointerException` sur `UserRoleScope.setPermanent` quand le
+       champ "Permanent ?" n'est pas coché explicitement — contourné en
+       cochant "Permanent" dans le formulaire
+    2. **Self-update interdit** : un utilisateur ne peut pas se créer sa
+       propre portée de rôle de stock (`userrolescopes.userUuid.selfupdate`)
+       — contourné en créant un compte temporaire pour attribuer la
+       portée au compte principal
+    3. **Cause racine trouvée : `at_location_id` cannot be null` à la
+       création d'une opération.** `StockOperationDTOValidator` — le
+       code censé résoudre l'emplacement et remplir `atLocationUuid` —
+       n'est **jamais invoqué nulle part dans le module 3.0.0** (code
+       mort), confirmé par un bug report public et une PR de correctif
+       encore ouverte à l'amont :
+       https://talk.openmrs.org/t/operation-receipt-save-fails-with-at-location-id-cannot-be-null-stockmanagement-api-3-0-0/49811
+       et https://github.com/openmrs/openmrs-module-stockmanagement/pull/47
+       — **corrigé en buildant nous-mêmes le module depuis la branche du
+       correctif** (fork `ebouJ/openmrs-module-stockmanagement`, commit
+       `890c93736e591fc3a4fb9977ae260de7b9b371b7`, version
+       `3.1.0-SNAPSHOT`) : voir `backend/Dockerfile` (étape de build
+       Maven supplémentaire avant la distro) et
+       `backend/distro/pom.xml` (`stockmanagement.version`)
+    4. Une fois le validateur actif, deux vrais contrôles de permission
+       sont apparus (auparavant silencieusement ignorés) :
+       - la "Portée" (User role scope) doit couvrir l'emplacement
+         **exact requis par le type d'opération** (ex. "Receipt" exige
+         un emplacement taggé "Main Store", pas juste l'établissement
+         parent "Fondation Fasse")
+       - le champ **"Rôle"** de la portée doit être un rôle qui possède
+         réellement le privilège technique `Task:
+         stockmanagement.stockoperations.mutate` (ex. "Inventory
+         Manager" ou "Inventory Clerk") — **pas** "System Developer",
+         qui ne l'a pas malgré ses autres privilèges élevés
+    - Testé avec succès : réception "RCPT-0001" (Paracétamol, Fasse
+      store → Main Store) créée, quantité reflétée dans le tableau de
+      bord ("En rupture de stock" mis à jour en conséquence)
+    - Reste à faire (optionnel, complétude démo) : faire une réception
+      pour les 10 autres médicaments du catalogue
 - 🚧 **§11-12 Prescription d'examens / Laboratoire** — onglet "Laboratoire"
-  déjà présent dans la nav principale ; à vérifier le workflow
-  prescrit → prélevé → résultat disponible → validé
+  déjà présent dans la nav principale (`esm-laboratory-app`, workflow
+  natif prescrit → prélevé → résultat disponible → validé, à vérifier
+  à l'usage)
+  - ✅ Catalogue de tests/examens configuré via Initializer :
+    `concepts/laboratory_exams_concepts.csv` — 14 nouveaux concepts
+    classe "Test" (Glycémie labo, CRP, Urée, NFS, Bilan hépatique,
+    Bilan lipidique, TSH, Sérologies, Examens urinaires, Holter ECG,
+    Spirométrie, Polygraphie, Échographie, Radiographie), en
+    réutilisant HbA1c / Créatinine / Ionogramme / Résultat ECG /
+    Résultat MAPA déjà créés pour §7-8 et §21 — couvre l'intégralité
+    de la liste du protocole §11
+  - ⚠️ Pas encore testé sur l'instance déployée (même geste `docker cp`
+    + `docker restart` que pour les autres domaines `concepts`)
+  - ⚠️ À vérifier une fois déployé : que le type de commande natif
+    "Test Order" propose bien ces concepts (classe "Test") à la
+    prescription — comportement par défaut attendu de l'app de
+    référence OpenMRS, non garanti sans test réel
 - ⬜ **§13 Courbes biologiques** — pas d'équivalent natif évident dans le
   menu ; probablement à construire (graphique d'évolution par patient)
 - 🚧 **§14 Résultats des examens** — via Observations/Encounters + upload
