@@ -211,10 +211,17 @@ configuration Initializer.
     evaluator), se déclenche quand Glycémie, CRP, Urée, TSH, HbA1c,
     Créatinine ou Glycémie capillaire sort de sa plage normale définie
     sur les concepts §7-8/§11/§21
-  - ⚠️ Pas encore testé — un seul flag pour commencer (requête SQL
-    volontairement non vérifiée en direct avant ce commit, contrairement
-    à notre pratique habituelle sur ce projet ; à valider avant d'en
-    ajouter d'autres)
+  - ⚠️ Pas encore validé de bout en bout. Deux erreurs déjà trouvées et
+    corrigées après un premier déploiement raté (2026-09-18) :
+    1. Classe évaluateur mal nommée : `SqlFlagEvaluator` (comme dans
+       l'exemple de la doc Initializer) n'existe pas dans
+       `patientflags` 3.0.10 → c'est `SQLFlagEvaluator` (SQL en
+       majuscules)
+    2. La requête doit contenir littéralement un motif `alias.patient_id`
+       référençant une vraie colonne (la table `obs` n'a que
+       `person_id`) — corrigé en joignant la table `patient`
+       (`pat.patient_id`)
+    Pas encore redéployé/retesté après ces corrections.
   - ⬜ Alerte "facture non réglée" : relève du service `caisse` (base de
     données séparée), pas un Patient Flag OpenMRS — à construire côté
     caisse si besoin
