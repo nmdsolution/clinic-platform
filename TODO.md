@@ -144,10 +144,9 @@ configuration Initializer.
       bord ("En rupture de stock" mis à jour en conséquence)
     - Reste à faire (optionnel, complétude démo) : faire une réception
       pour les 10 autres médicaments du catalogue
-- 🚧 **§11-12 Prescription d'examens / Laboratoire** — onglet "Laboratoire"
-  déjà présent dans la nav principale (`esm-laboratory-app`, workflow
-  natif prescrit → prélevé → résultat disponible → validé, à vérifier
-  à l'usage)
+- ✅ **§11-12 Prescription d'examens / Laboratoire** — onglet "Laboratoire"
+  natif (`esm-laboratory-app`), workflow prescrit → prélevé → résultat
+  disponible → validé
   - ✅ Catalogue de tests/examens configuré via Initializer :
     `concepts/laboratory_exams_concepts.csv` — 14 nouveaux concepts
     classe "Test" (Glycémie labo, CRP, Urée, NFS, Bilan hépatique,
@@ -156,12 +155,10 @@ configuration Initializer.
     réutilisant HbA1c / Créatinine / Ionogramme / Résultat ECG /
     Résultat MAPA déjà créés pour §7-8 et §21 — couvre l'intégralité
     de la liste du protocole §11
-  - ⚠️ Pas encore testé sur l'instance déployée (même geste `docker cp`
-    + `docker restart` que pour les autres domaines `concepts`)
-  - ⚠️ À vérifier une fois déployé : que le type de commande natif
-    "Test Order" propose bien ces concepts (classe "Test") à la
-    prescription — comportement par défaut attendu de l'app de
-    référence OpenMRS, non garanti sans test réel
+  - ✅ Testé sur l'instance déployée (2026-09-17) : "Glycémie"
+    prescriptible via "Analyses" → "Test order" dans le dossier
+    patient (ORD-377), et la demande apparaît bien dans la file
+    d'attente du module Laboratoire ("Examens prescrits")
 - ⬜ **§13 Courbes biologiques** — pas d'équivalent natif évident dans le
   menu ; probablement à construire (graphique d'évolution par patient)
 - 🚧 **§14 Résultats des examens** — via Observations/Encounters + upload
@@ -205,9 +202,25 @@ configuration Initializer.
   construire, hors couverture OpenMRS
 - ⬜ **§26 Dépenses de la structure** — à construire
 - 🚧 **§30 Centre d'alertes** — module "Alerte des Patients" / "Gestion
-  des Alertes" (Patient Flags) natif pour les alertes cliniques ; les
-  alertes stock/facture restent à raccorder (déjà partiellement dispo
-  côté service caisse)
+  des Alertes" (Patient Flags) natif pour les alertes cliniques
+  - ✅ Alertes stock (stock faible, péremption) **déjà couvertes
+    nativement** par le tableau de bord "Gestion des Stocks" (confirmé
+    fonctionnel pendant les tests §10) — rien à ajouter
+  - ✅ Premier flag clinique configuré via Initializer :
+    `flags/clinical_flags.csv` — "Résultat biologique anormal" (SQL
+    evaluator), se déclenche quand Glycémie, CRP, Urée, TSH, HbA1c,
+    Créatinine ou Glycémie capillaire sort de sa plage normale définie
+    sur les concepts §7-8/§11/§21
+  - ⚠️ Pas encore testé — un seul flag pour commencer (requête SQL
+    volontairement non vérifiée en direct avant ce commit, contrairement
+    à notre pratique habituelle sur ce projet ; à valider avant d'en
+    ajouter d'autres)
+  - ⬜ Alerte "facture non réglée" : relève du service `caisse` (base de
+    données séparée), pas un Patient Flag OpenMRS — à construire côté
+    caisse si besoin
+  - ⬜ Reste à ajouter si le premier flag fonctionne : rendez-vous à
+    venir, contrôle médical à programmer, salarié absent/retard,
+    document administratif expirant
 - 🚧 **§31 Statistiques** — module Rapports natif (Report Builder, Cohort
   Queries, Data Set Definitions) permet de construire les statistiques
   demandées sans développement ad hoc
