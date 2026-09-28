@@ -1,4 +1,4 @@
-﻿# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1
 
 ### Dev Stage
 FROM openmrs/openmrs-core:2.8.x-dev-amazoncorretto-21 AS dev
@@ -36,15 +36,23 @@ RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_modules /
 RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_owas /openmrs/distribution/openmrs_owas/
 RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_config /openmrs/distribution/openmrs_config/
 
-# Replace OpenMRS branding logo in Legacy UI with clinic logo (done here in dev stage as root)
+# Replace OpenMRS branding in Legacy UI WAR (done in dev stage where we have root write access):
+#   - replace logo image with clinic logo
+#   - patch messages.properties title if the file exists in the WAR
 COPY frontend/custom-modules/esm-login-app/src/logo-clinic.png /tmp/logo-clinic.png
 RUN mkdir -p /tmp/logo/images && \
     cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
     cp /openmrs/distribution/openmrs_core/openmrs.war /tmp/logo/openmrs.war && \
     cd /tmp/logo && \
-    jar xf openmrs.war WEB-INF/classes/messages.properties && \
-    sed -i 's/^openmrs\.title=.*/openmrs.title=HGest/' WEB-INF/classes/messages.properties && \
-    jar uf openmrs.war images/openmrs_logo_white.gif WEB-INF/classes/messages.properties && \
+    MSGS=$(jar tf openmrs.war | grep 'messages\.properties$' | head -1) && \
+    if [ -n "$MSGS" ]; then \
+      mkdir -p "$(dirname $MSGS)" && \
+      jar xf openmrs.war "$MSGS" && \
+      sed -i 's/^openmrs\.title=.*/openmrs.title=HGest/' "$MSGS" && \
+      jar uf openmrs.war images/openmrs_logo_white.gif "$MSGS"; \
+    else \
+      jar uf openmrs.war images/openmrs_logo_white.gif; \
+    fi && \
     cp openmrs.war /openmrs/distribution/openmrs_core/openmrs.war && \
     rm -rf /tmp/logo /tmp/logo-clinic.png
 
@@ -60,5 +68,3 @@ COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distrib
 COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/openmrs_modules
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
-
-
