@@ -63,6 +63,12 @@ server {
 
   resolver 127.0.0.11 valid=30s ipv6=off;
 
+  location /assets/ {
+    root /usr/share/nginx/html;
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+  }
+
   location /openmrs/spa/ {
     set $frontend http://frontend;
     rewrite ^/openmrs/spa/(.*) /$1 break;
