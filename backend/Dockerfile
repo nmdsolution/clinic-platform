@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+﻿# syntax=docker/dockerfile:1
 
 ### Dev Stage
 FROM openmrs/openmrs-core:2.8.x-dev-amazoncorretto-21 AS dev
@@ -58,3 +58,4 @@ RUN mkdir -p /tmp/logo/images && \
     cd /tmp/logo && \
     jar uf /openmrs/distribution/openmrs_core/openmrs.war images/openmrs_logo_white.gif && \
     rm -rf /tmp/logo /tmp/logo-clinic.png
+
