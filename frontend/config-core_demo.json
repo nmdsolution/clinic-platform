@@ -27,7 +27,7 @@
   "@openmrs/esm-primary-navigation-app": {
     "logo": {
       "src": "/assets/logo-clinic.png",
-      "alt": "Fondation Médicale FACE"
+      "alt": "HGest"
     },
     "extensionSlots": {
       "app-menu-slot": {

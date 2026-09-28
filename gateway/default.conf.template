@@ -69,6 +69,13 @@ server {
     add_header Cache-Control "public, immutable";
   }
 
+  location = /favicon.ico {
+    alias /usr/share/nginx/html/assets/logo-clinic.png;
+    add_header Content-Type image/png;
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+  }
+
   location /openmrs/spa/ {
     set $frontend http://frontend;
     rewrite ^/openmrs/spa/(.*) /$1 break;
