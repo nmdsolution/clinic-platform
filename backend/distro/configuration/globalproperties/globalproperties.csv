@@ -1,2 +1,12 @@
 Property,Value,Description
-application.logo,/assets/logo-clinic.png,Logo Clinic FACE affiché dans l'interface legacy OpenMRS
+application.logo,/assets/logo-clinic.png,Logo Clinic FACE
+application.name,Fondation Médicale FACE,Nom affiché sur la page login et d'accueil
+default_locale,fr,Langue par défaut
+locale.allowed.list,"fr, en",Langues disponibles
+default_location,Fondation Médicale Fasse,Emplacement par défaut du système
+billing.currencySymbol,XAF,Devise pour les reçus de facturation
+layout.name.format,long,Afficher prénom + nom complet
+datePicker.weekStart,1,Semaine commence le lundi
+dashboard.encounters.maximumNumberToShow,5,Nombre de rencontres sur le tableau de bord
+minSearchCharacters,2,Nombre minimum de caractères pour la recherche
+patientSearch.matchMode,ANYWHERE,Recherche patient sur toute la chaîne
