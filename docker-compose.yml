@@ -13,8 +13,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend/custom-modules/esm-caisse-app
-      dockerfile: overlay.Dockerfile
+      context: ./frontend
+      dockerfile: custom-modules/esm-caisse-app/overlay.Dockerfile
       args:
         BASE_FRONTEND_TAG: ${TAG:-3.7.1}
     restart: "unless-stopped"
