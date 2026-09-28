@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+﻿# syntax=docker/dockerfile:1
 
 ### Dev Stage
 FROM openmrs/openmrs-core:2.8.x-dev-amazoncorretto-21 AS dev
@@ -42,7 +42,9 @@ RUN mkdir -p /tmp/logo/images && \
     cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
     cp /openmrs/distribution/openmrs_core/openmrs.war /tmp/logo/openmrs.war && \
     cd /tmp/logo && \
-    jar uf openmrs.war images/openmrs_logo_white.gif && \
+    jar xf openmrs.war WEB-INF/classes/messages.properties && \
+    sed -i 's/^openmrs\.title=.*/openmrs.title=HGest/' WEB-INF/classes/messages.properties && \
+    jar uf openmrs.war images/openmrs_logo_white.gif WEB-INF/classes/messages.properties && \
     cp openmrs.war /openmrs/distribution/openmrs_core/openmrs.war && \
     rm -rf /tmp/logo /tmp/logo-clinic.png
 
@@ -58,3 +60,5 @@ COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distrib
 COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/openmrs_modules
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
+
+
