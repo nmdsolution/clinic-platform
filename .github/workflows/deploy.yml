@@ -12,19 +12,19 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy to Azure VM
+    name: Deploy to OVH VPS
     runs-on: ubuntu-latest
     environment: develop
     env:
-      VM_HOST: 48.217.187.71
-      VM_USER: azureuser
+      VM_HOST: 135.125.75.107
+      VM_USER: ubuntu
       DEPLOY_PATH: /opt/clinic-platform
 
     steps:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.AZURE_VM_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
+          echo "${{ secrets.OVH_VPS_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$VM_HOST" >> ~/.ssh/known_hosts
 
