@@ -1,4 +1,4 @@
-﻿# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1
 
 ### Dev Stage
 FROM openmrs/openmrs-core:2.8.x-dev-amazoncorretto-21 AS dev
@@ -40,10 +40,8 @@ RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_config /o
 RUN mvn $MVN_ARGS clean
 
 ### Run Stage
-# Replace '2.7.x' with the exact version of openmrs-core built for production (if available)
 FROM openmrs/openmrs-core:2.8.x-amazoncorretto-21
 
-# Do not copy the war if using the correct openmrs-core image version
 COPY --from=dev /openmrs/distribution/openmrs_core/openmrs.war /openmrs/distribution/openmrs_core/
 
 COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distribution/
@@ -52,10 +50,12 @@ COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
 
 # Replace OpenMRS branding logo in Legacy UI with clinic logo
+# jar uf creates a temp file in the same dir as the WAR; copy WAR to /tmp first (writable)
 COPY frontend/custom-modules/esm-login-app/src/logo-clinic.png /tmp/logo-clinic.png
 RUN mkdir -p /tmp/logo/images && \
     cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
+    cp /openmrs/distribution/openmrs_core/openmrs.war /tmp/logo/openmrs.war && \
     cd /tmp/logo && \
-    jar uf /openmrs/distribution/openmrs_core/openmrs.war images/openmrs_logo_white.gif && \
+    jar uf openmrs.war images/openmrs_logo_white.gif && \
+    cp openmrs.war /openmrs/distribution/openmrs_core/openmrs.war && \
     rm -rf /tmp/logo /tmp/logo-clinic.png
-
