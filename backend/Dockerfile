@@ -50,3 +50,11 @@ COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distrib
 COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/openmrs_modules
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
+
+# Replace OpenMRS branding logo in Legacy UI with clinic logo
+COPY frontend/custom-modules/esm-login-app/src/logo-clinic.png /tmp/logo-clinic.png
+RUN mkdir -p /tmp/logo/images && \
+    cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
+    cd /tmp/logo && \
+    jar uf /openmrs/distribution/openmrs_core/openmrs.war images/openmrs_logo_white.gif && \
+    rm -rf /tmp/logo /tmp/logo-clinic.png
