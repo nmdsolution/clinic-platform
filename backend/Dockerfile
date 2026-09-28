@@ -36,6 +36,16 @@ RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_modules /
 RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_owas /openmrs/distribution/openmrs_owas/
 RUN cp -R /openmrs_distro/backend/distro/target/sdk-distro/web/openmrs_config /openmrs/distribution/openmrs_config/
 
+# Replace OpenMRS branding logo in Legacy UI with clinic logo (done here in dev stage as root)
+COPY frontend/custom-modules/esm-login-app/src/logo-clinic.png /tmp/logo-clinic.png
+RUN mkdir -p /tmp/logo/images && \
+    cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
+    cp /openmrs/distribution/openmrs_core/openmrs.war /tmp/logo/openmrs.war && \
+    cd /tmp/logo && \
+    jar uf openmrs.war images/openmrs_logo_white.gif && \
+    cp openmrs.war /openmrs/distribution/openmrs_core/openmrs.war && \
+    rm -rf /tmp/logo /tmp/logo-clinic.png
+
 # Clean up after copying needed artifacts
 RUN mvn $MVN_ARGS clean
 
@@ -48,14 +58,3 @@ COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distrib
 COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/openmrs_modules
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
-
-# Replace OpenMRS branding logo in Legacy UI with clinic logo
-# jar uf creates a temp file in the same dir as the WAR; copy WAR to /tmp first (writable)
-COPY frontend/custom-modules/esm-login-app/src/logo-clinic.png /tmp/logo-clinic.png
-RUN mkdir -p /tmp/logo/images && \
-    cp /tmp/logo-clinic.png /tmp/logo/images/openmrs_logo_white.gif && \
-    cp /openmrs/distribution/openmrs_core/openmrs.war /tmp/logo/openmrs.war && \
-    cd /tmp/logo && \
-    jar uf openmrs.war images/openmrs_logo_white.gif && \
-    cp openmrs.war /openmrs/distribution/openmrs_core/openmrs.war && \
-    rm -rf /tmp/logo /tmp/logo-clinic.png
