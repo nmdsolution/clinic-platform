@@ -22,7 +22,7 @@
     "defaultCurrency": "XAF",
     "country": "Cameroun",
     "logo": {
-      "src": "/assets/logo-fasse.png",
+      "src": "/assets/logo-fasse.png?v=2",
       "alt": "Fondation Médicale FASSE"
     }
   },
