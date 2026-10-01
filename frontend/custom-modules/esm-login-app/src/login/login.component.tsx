@@ -16,6 +16,7 @@ import {
 } from '@openmrs/esm-framework';
 import { type ConfigSchema } from '../config-schema';
 import illustration from './login-illustration.jpg';
+import brandLogo from '../logo-fasse.png';
 import styles from './login.scss';
 
 export interface LoginReferrer {
@@ -260,7 +261,7 @@ const Login: React.FC = () => {
                 <img
                   className={styles.illustrationImage}
                   src={illustration}
-                  alt={t('loginIllustrationAlt', 'Soignant de la Clinique FACE')}
+                  alt={t('loginIllustrationAlt', 'Soignant de la Fondation Médicale FASSE')}
                 />
               </div>
             </div>
@@ -297,22 +298,9 @@ const Login: React.FC = () => {
             <div className={styles.formBody}>
               <div className={styles.brandRow}>
                 <span className={styles.brandIcon} aria-hidden="true">
-                  <svg width="21" height="21" viewBox="0 0 22 22">
-                    <path
-                      d="M11 19.2C6.2 16.2 3 13.4 3 9.6A4.6 4.6 0 0 1 11 6.5 4.6 4.6 0 0 1 19 9.6c0 3.8-3.2 6.6-8 9.6Z"
-                      fill="#ffffff"
-                    />
-                    <path
-                      d="M4.6 11.4h3.1l1.5-2.6 2 5 1.6-3.1h4.6"
-                      stroke="#005d5d"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="none"
-                    />
-                  </svg>
+                  <img src={brandLogo} alt="" className={styles.brandLogoImg} />
                 </span>
-                <span className={styles.brandWordmark}>{t('appName', 'Clinic FACE')}</span>
+                <span className={styles.brandWordmark}>{t('appName', 'Fondation Médicale FASSE')}</span>
               </div>
 
               {errorMessage && (
@@ -504,7 +492,7 @@ const Login: React.FC = () => {
             </div>
 
             <div className={styles.footerText}>
-              {t('loginFooterText', 'Clinic FACE · OpenMRS 3 Reference Application · v3.7.1')}
+              {t('loginFooterText', 'Fondation Médicale FASSE · OpenMRS 3 · v3.7.1')}
             </div>
           </div>
         </div>
