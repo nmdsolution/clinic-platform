@@ -19,7 +19,12 @@
     "labTableColumns": ["name", "patientId", "urgency", "age", "sex", "totalOrders", "action"]
   },
   "@openmrs/esm-billing-app": {
-    "defaultCurrency": "XAF"
+    "defaultCurrency": "XAF",
+    "country": "Cameroun",
+    "logo": {
+      "src": "/assets/logo-fasse.png",
+      "alt": "Fondation Médicale FASSE"
+    }
   },
   "@openmrs/esm-styleguide": {
     "Brand color #1": "#005d5d"
