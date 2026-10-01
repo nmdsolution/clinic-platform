@@ -5,6 +5,7 @@ default_locale,fr,Langue par défaut
 locale.allowed.list,"fr, en",Langues disponibles
 default_location,Fondation Médicale Fasse,Emplacement par défaut du système
 billing.currencySymbol,XAF,Devise pour les reçus de facturation
+billing.receipt.logoPath,/assets/logo-fasse.png,Logo FASSE affiché en en-tête des factures
 layout.name.format,long,Afficher prénom + nom complet
 datePicker.weekStart,1,Semaine commence le lundi
 dashboard.encounters.maximumNumberToShow,5,Nombre de rencontres sur le tableau de bord
