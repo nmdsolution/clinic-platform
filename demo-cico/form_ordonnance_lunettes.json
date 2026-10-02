@@ -1,0 +1,187 @@
+{
+  "name": "Ordonnance de lunettes",
+  "description": "Prescription de correction optique : sphère, cylindre, axe, addition et écart pupillaire.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Ordonnance de lunettes",
+  "processor": "EncounterFormProcessor",
+  "referencedForms": [],
+  "pages": [
+    {
+      "label": "Correction",
+      "sections": [
+        {
+          "label": "Oeil droit (OD)",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OD — sphère (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000050",
+                "min": "-25",
+                "max": "25"
+              },
+              "id": "odSph",
+              "required": true
+            },
+            {
+              "label": "OD — cylindre (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000051",
+                "min": "-10",
+                "max": "10"
+              },
+              "id": "odCyl"
+            },
+            {
+              "label": "OD — axe (°)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000052",
+                "min": "0",
+                "max": "180"
+              },
+              "id": "odAxe"
+            },
+            {
+              "label": "OD — addition (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000053",
+                "min": "0",
+                "max": "4"
+              },
+              "id": "odAdd"
+            }
+          ]
+        },
+        {
+          "label": "Oeil gauche (OG)",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OG — sphère (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000054",
+                "min": "-25",
+                "max": "25"
+              },
+              "id": "ogSph",
+              "required": true
+            },
+            {
+              "label": "OG — cylindre (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000055",
+                "min": "-10",
+                "max": "10"
+              },
+              "id": "ogCyl"
+            },
+            {
+              "label": "OG — axe (°)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000056",
+                "min": "0",
+                "max": "180"
+              },
+              "id": "ogAxe"
+            },
+            {
+              "label": "OG — addition (D)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000057",
+                "min": "0",
+                "max": "4"
+              },
+              "id": "ogAdd"
+            }
+          ]
+        },
+        {
+          "label": "Montage",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Écart pupillaire (mm)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000058",
+                "min": "40",
+                "max": "80"
+              },
+              "id": "ecartPup"
+            },
+            {
+              "label": "Type de verres",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "radio",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000059",
+                "answers": [
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000060",
+                    "label": "Unifocaux"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000061",
+                    "label": "Progressifs"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000062",
+                    "label": "Bifocaux"
+                  }
+                ]
+              },
+              "id": "typeVerres",
+              "required": true
+            },
+            {
+              "label": "Traitement des verres (anti-reflet, photochromique...)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000063"
+              },
+              "id": "traitement"
+            },
+            {
+              "label": "Usage (vision de loin, de près, port permanent)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000064"
+              },
+              "id": "usage"
+            },
+            {
+              "label": "Remarques",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000065"
+              },
+              "id": "remarquesLunettes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

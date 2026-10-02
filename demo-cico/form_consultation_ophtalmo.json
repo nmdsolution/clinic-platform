@@ -1,0 +1,186 @@
+{
+  "name": "Consultation ophtalmologique",
+  "description": "Examen ophtalmologique : acuité visuelle, tension oculaire, segment antérieur et fond d'oeil.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Consultation ophtalmologique",
+  "processor": "EncounterFormProcessor",
+  "referencedForms": [],
+  "pages": [
+    {
+      "label": "Interrogatoire",
+      "sections": [
+        {
+          "label": "Motif",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Motif de consultation",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000013"
+              },
+              "id": "motifOphtalmo",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Examen",
+      "sections": [
+        {
+          "label": "Acuité visuelle (échelle de Monoyer, ex. 3/10)",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OD — sans correction",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000001"
+              },
+              "id": "avscOD"
+            },
+            {
+              "label": "OG — sans correction",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000002"
+              },
+              "id": "avscOG"
+            },
+            {
+              "label": "OD — avec correction",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000003"
+              },
+              "id": "avacOD"
+            },
+            {
+              "label": "OG — avec correction",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000004"
+              },
+              "id": "avacOG"
+            }
+          ]
+        },
+        {
+          "label": "Tension oculaire (mmHg)",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OD — tension oculaire",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000005",
+                "min": "0",
+                "max": "80"
+              },
+              "id": "toOD"
+            },
+            {
+              "label": "OG — tension oculaire",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000006",
+                "min": "0",
+                "max": "80"
+              },
+              "id": "toOG"
+            }
+          ]
+        },
+        {
+          "label": "Segment antérieur (lampe à fente)",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OD — segment antérieur",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000007"
+              },
+              "id": "saOD"
+            },
+            {
+              "label": "OG — segment antérieur",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000008"
+              },
+              "id": "saOG"
+            }
+          ]
+        },
+        {
+          "label": "Fond d'oeil",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "OD — fond d'oeil",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000009"
+              },
+              "id": "foOD"
+            },
+            {
+              "label": "OG — fond d'oeil",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000010"
+              },
+              "id": "foOG"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Conclusion",
+      "sections": [
+        {
+          "label": "Diagnostic et conduite à tenir",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Diagnostic",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000011"
+              },
+              "id": "diagOphtalmo",
+              "required": true
+            },
+            {
+              "label": "Conduite à tenir",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000012"
+              },
+              "id": "ctaOphtalmo"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

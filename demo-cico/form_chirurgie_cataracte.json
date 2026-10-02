@@ -1,0 +1,203 @@
+{
+  "name": "Compte-rendu opératoire ophtalmologique",
+  "description": "Chirurgie ophtalmologique (cataracte, glaucome, ptérygion) et suivi post-opératoire J1 / J7 / J30.",
+  "version": "1",
+  "published": true,
+  "retired": false,
+  "encounter": "Chirurgie ophtalmologique",
+  "processor": "EncounterFormProcessor",
+  "referencedForms": [],
+  "pages": [
+    {
+      "label": "Intervention",
+      "sections": [
+        {
+          "label": "Acte opératoire",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "Date de l'intervention",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000020"
+              },
+              "id": "dateInterv",
+              "required": true
+            },
+            {
+              "label": "Type d'intervention",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "radio",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000025",
+                "answers": [
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000026",
+                    "label": "Chirurgie de la cataracte"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000027",
+                    "label": "Chirurgie du glaucome (trabéculectomie)"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000028",
+                    "label": "Exérèse de ptérygion"
+                  }
+                ]
+              },
+              "id": "typeInterv",
+              "required": true
+            },
+            {
+              "label": "Oeil opéré",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "radio",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000021",
+                "answers": [
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000022",
+                    "label": "Oeil droit (OD)"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000023",
+                    "label": "Oeil gauche (OG)"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000024",
+                    "label": "Les deux yeux (ODG)"
+                  }
+                ]
+              },
+              "id": "oeilOpere",
+              "required": true
+            },
+            {
+              "label": "Technique opératoire",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "radio",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000029",
+                "answers": [
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000030",
+                    "label": "Phacoémulsification"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000031",
+                    "label": "MSICS (petite incision manuelle)"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000032",
+                    "label": "Extraction extracapsulaire (EEC)"
+                  }
+                ]
+              },
+              "id": "technique"
+            },
+            {
+              "label": "Puissance de l'implant (dioptries)",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000033",
+                "min": "-10",
+                "max": "40"
+              },
+              "id": "implant"
+            },
+            {
+              "label": "Type d'anesthésie",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "radio",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000034",
+                "answers": [
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000035",
+                    "label": "Topique"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000036",
+                    "label": "Péribulbaire"
+                  },
+                  {
+                    "concept": "0f7a0000-c1c0-4000-8000-000000000037",
+                    "label": "Générale"
+                  }
+                ]
+              },
+              "id": "anesthesie"
+            },
+            {
+              "label": "Chirurgien",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000038"
+              },
+              "id": "chirurgien"
+            },
+            {
+              "label": "Complications per-opératoires",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000039"
+              },
+              "id": "complications"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Suivi post-opératoire",
+      "sections": [
+        {
+          "label": "Contrôles",
+          "isExpanded": "true",
+          "questions": [
+            {
+              "label": "J1 — contrôle du lendemain",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000040"
+              },
+              "id": "suiviJ1"
+            },
+            {
+              "label": "J7 — contrôle à une semaine",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000041"
+              },
+              "id": "suiviJ7"
+            },
+            {
+              "label": "J30 — contrôle à un mois",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "textarea",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000042"
+              },
+              "id": "suiviJ30"
+            },
+            {
+              "label": "Date du prochain rendez-vous",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "0f7a0000-c1c0-4000-8000-000000000043"
+              },
+              "id": "prochainRdv"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
