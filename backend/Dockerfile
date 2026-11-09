@@ -68,3 +68,8 @@ COPY --from=dev /openmrs/distribution/openmrs-distro.properties /openmrs/distrib
 COPY --from=dev /openmrs/distribution/openmrs_modules /openmrs/distribution/openmrs_modules
 COPY --from=dev /openmrs/distribution/openmrs_owas /openmrs/distribution/openmrs_owas
 COPY --from=dev  /openmrs/distribution/openmrs_config /openmrs/distribution/openmrs_config
+
+# Fichiers Initializer FASSE embarqués dans l'image, un par un : les autres
+# fichiers de backend/distro/configuration ont été chargés à la main sur le
+# serveur et ne doivent pas être rejoués au démarrage (doublons possibles).
+COPY backend/distro/configuration/concepts/laboratory_orderables_fasse.csv /openmrs/distribution/openmrs_config/concepts/
