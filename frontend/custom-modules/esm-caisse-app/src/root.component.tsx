@@ -52,14 +52,14 @@ const Root: React.FC = () => {
     if (!ssoAttempted) {
       return (
         <div className={styles.container}>
-          <h3 className={styles.title}>{t('caisseTitle', 'Clinique FACE — Caisse & Facturation')}</h3>
+          <h3 className={styles.title}>{t('caisseTitle', 'Fondation Médicale FASSE — Caisse & Facturation')}</h3>
           <p>{t('connecting', 'Connexion en cours...')}</p>
         </div>
       );
     }
     return (
       <div className={styles.container}>
-        <h3 className={styles.title}>{t('caisseTitle', 'Clinique FACE — Caisse & Facturation')}</h3>
+        <h3 className={styles.title}>{t('caisseTitle', 'Fondation Médicale FASSE — Caisse & Facturation')}</h3>
         <LoginForm api={api} onLoggedIn={setUser} />
       </div>
     );
@@ -68,7 +68,7 @@ const Root: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3 className={styles.title}>{t('caisseTitle', 'Clinique FACE — Caisse & Facturation')}</h3>
+        <h3 className={styles.title}>{t('caisseTitle', 'Fondation Médicale FASSE — Caisse & Facturation')}</h3>
         <div className={styles.userInfo}>
           <span>
             {user.full_name} ({user.role})

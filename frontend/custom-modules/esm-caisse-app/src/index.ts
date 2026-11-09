@@ -1,5 +1,5 @@
 /**
- * Point d'entrée du module Caisse & Facturation - Clinique FACE.
+ * Point d'entrée du module Caisse & Facturation - Fondation Médicale FASSE.
  * Voir services/caisse/ pour l'API Python que ce module consomme.
  */
 import { getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';

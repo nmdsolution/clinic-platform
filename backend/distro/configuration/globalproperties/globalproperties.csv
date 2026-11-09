@@ -1,5 +1,5 @@
 Property,Value,Description
-application.logo,/assets/logo-clinic.png,Logo Clinic FACE
+application.logo,/assets/logo-clinic.png,Logo Fondation Médicale FASSE
 application.name,HGest,Nom affiché sur la page login et d'accueil
 default_locale,fr,Langue par défaut
 locale.allowed.list,"fr, en",Langues disponibles

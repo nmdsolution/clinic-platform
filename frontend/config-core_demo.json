@@ -15,6 +15,11 @@
       }
     }
   },
+  "@openmrs/esm-patient-tests-app": {
+    "orders": {
+      "labOrderableConcepts": ["81d547fb-f646-5ccf-9f62-01d502fa4084"]
+    }
+  },
   "@openmrs/esm-laboratory-app": {
     "labTableColumns": ["name", "patientId", "urgency", "age", "sex", "totalOrders", "action"]
   },

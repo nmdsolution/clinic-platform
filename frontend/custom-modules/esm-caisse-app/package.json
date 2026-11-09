@@ -2,7 +2,7 @@
   "name": "@face/esm-caisse-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "Module Caisse & Facturation pour la Clinique FACE - interface OpenMRS 3 (O3)",
+  "description": "Module Caisse & Facturation pour la Fondation Médicale FASSE - interface OpenMRS 3 (O3)",
   "browser": "dist/openmrs-esm-caisse-app.js",
   "main": "src/index.ts",
   "source": true,
