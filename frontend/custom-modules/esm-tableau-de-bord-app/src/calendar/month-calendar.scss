@@ -1,0 +1,77 @@
+.calendar {
+  max-width: 56rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.monthName {
+  min-width: 10rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.weekday {
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  color: #525252;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-height: 4.25rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+  color: #6f6f6f;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #005d5d;
+  }
+}
+
+.active {
+  background: #d9fbfb;
+  color: #161616;
+}
+
+.selected {
+  outline: 2px solid #005d5d;
+  outline-offset: -2px;
+}
+
+.today .dayNumber {
+  color: #005d5d;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.dayNumber {
+  font-size: 0.8rem;
+}
+
+.dayValue {
+  font-size: 0.8rem;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,63 @@
+.container {
+  padding: 1rem 1.5rem;
+}
+
+.title {
+  margin: 0 0 1rem;
+}
+
+.panel {
+  padding: 1rem 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.count {
+  font-size: 0.9rem;
+  color: #525252;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.empty {
+  padding: 1.5rem 0;
+  color: #525252;
+}
+
+.sectionTitle {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.totalLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: #525252;
+  text-transform: uppercase;
+}
+
+.totalValue {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
