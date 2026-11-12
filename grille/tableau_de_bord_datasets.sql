@@ -278,6 +278,10 @@ FROM (
   JOIN cashier_bill_line_item li ON li.bill_id = b.bill_id AND li.voided = 0
   WHERE b.voided = 0
     AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+    AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
   GROUP BY DATE_FORMAT(b.date_created, &apos;%Y-%m-%d&apos;)
   UNION ALL
   SELECT DATE_FORMAT(bp.date_created, &apos;%Y-%m-%d&apos;), 0, 0, SUM(bp.amount)
@@ -285,6 +289,10 @@ FROM (
   JOIN cashier_bill b ON b.bill_id = bp.bill_id AND b.voided = 0
   WHERE bp.voided = 0
     AND bp.date_created &gt;= DATE(:startDate) AND bp.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+    AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
   GROUP BY DATE_FORMAT(bp.date_created, &apos;%Y-%m-%d&apos;)
 ) x
 GROUP BY jour
@@ -321,6 +329,10 @@ FROM (
   JOIN cashier_bill_line_item li ON li.bill_id = b.bill_id AND li.voided = 0
   WHERE b.voided = 0
     AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+    AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
   GROUP BY DATE_FORMAT(b.date_created, &apos;%Y-%m-%d&apos;)
   UNION ALL
   SELECT DATE_FORMAT(bp.date_created, &apos;%Y-%m-%d&apos;), 0, 0, SUM(bp.amount)
@@ -328,6 +340,10 @@ FROM (
   JOIN cashier_bill b ON b.bill_id = bp.bill_id AND b.voided = 0
   WHERE bp.voided = 0
     AND bp.date_created &gt;= DATE(:startDate) AND bp.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+    AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
   GROUP BY DATE_FORMAT(bp.date_created, &apos;%Y-%m-%d&apos;)
 ) x
 GROUP BY jour
@@ -367,6 +383,10 @@ JOIN person p ON p.person_id = b.patient_id
 LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
 WHERE b.voided = 0
   AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
 ORDER BY b.date_created</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b005'
 FROM serialized_object
@@ -401,6 +421,10 @@ JOIN person p ON p.person_id = b.patient_id
 LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
 WHERE b.voided = 0
   AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
 ORDER BY b.date_created</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
 WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b005';
@@ -504,6 +528,352 @@ WHERE l.retired = 0 AND lt.name IN (&apos;Main Store&apos;, &apos;Main Pharmacy&
 ORDER BY magasin</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
 WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b007';
+
+-- Tableau de bord - Indicateurs du jour
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Indicateurs du jour', 'Chiffres du jour pour l''écran Parcours patient', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b008" retired="false">
+  <name>Tableau de bord - Indicateurs du jour</name>
+  <description>Chiffres du jour pour l''écran Parcours patient</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT
+  (SELECT COUNT(*) FROM patient pt WHERE pt.voided = 0 AND pt.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = pt.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS patients_jour,
+  (SELECT COUNT(*) FROM visit v WHERE v.voided = 0 AND v.date_started &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS visites_jour,
+  (SELECT COUNT(*) FROM visit v WHERE v.voided = 0 AND v.date_stopped IS NULL
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS visites_ouvertes,
+  (SELECT COUNT(*) FROM cashier_bill b WHERE b.voided = 0 AND b.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS factures_jour,
+  (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp
+     JOIN cashier_bill b ON b.bill_id = bp.bill_id AND b.voided = 0
+    WHERE bp.voided = 0 AND bp.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS encaisse_jour,
+  (SELECT COUNT(*) FROM cashier_bill b WHERE b.voided = 0 AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_nb,
+  (SELECT COALESCE(SUM((SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)), 0) FROM cashier_bill b
+    WHERE b.voided = 0 AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_montant,
+  (SELECT COUNT(*) FROM orders o JOIN order_type ot ON ot.order_type_id = o.order_type_id
+    WHERE o.voided = 0 AND ot.name = &apos;Test Order&apos; AND o.date_stopped IS NULL
+      AND o.fulfiller_status IS NULL AND o.date_activated &gt;= CURDATE() - INTERVAL 7 DAY
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = o.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS examens_en_attente</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b008'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b008');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b008" retired="false">
+  <name>Tableau de bord - Indicateurs du jour</name>
+  <description>Chiffres du jour pour l''écran Parcours patient</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT
+  (SELECT COUNT(*) FROM patient pt WHERE pt.voided = 0 AND pt.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = pt.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS patients_jour,
+  (SELECT COUNT(*) FROM visit v WHERE v.voided = 0 AND v.date_started &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS visites_jour,
+  (SELECT COUNT(*) FROM visit v WHERE v.voided = 0 AND v.date_stopped IS NULL
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS visites_ouvertes,
+  (SELECT COUNT(*) FROM cashier_bill b WHERE b.voided = 0 AND b.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS factures_jour,
+  (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp
+     JOIN cashier_bill b ON b.bill_id = bp.bill_id AND b.voided = 0
+    WHERE bp.voided = 0 AND bp.date_created &gt;= CURDATE()
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS encaisse_jour,
+  (SELECT COUNT(*) FROM cashier_bill b WHERE b.voided = 0 AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_nb,
+  (SELECT COALESCE(SUM((SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)), 0) FROM cashier_bill b
+    WHERE b.voided = 0 AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_montant,
+  (SELECT COUNT(*) FROM orders o JOIN order_type ot ON ot.order_type_id = o.order_type_id
+    WHERE o.voided = 0 AND ot.name = &apos;Test Order&apos; AND o.date_stopped IS NULL
+      AND o.fulfiller_status IS NULL AND o.date_activated &gt;= CURDATE() - INTERVAL 7 DAY
+      AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = o.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS examens_en_attente</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b008';
+
+-- Tableau de bord - Médicaments
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Médicaments', 'Médicaments prescriptibles avec leur stock', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b009" retired="false">
+  <name>Tableau de bord - Médicaments</name>
+  <description>Médicaments prescriptibles avec leur stock</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT d.name AS medicament,
+       d.strength AS dosage,
+       (SELECT fcn.name FROM concept_name fcn
+         WHERE fcn.concept_id = d.dosage_form AND fcn.voided = 0 AND fcn.locale_preferred = 1
+         ORDER BY fcn.locale = &apos;fr&apos; DESC, fcn.locale = &apos;en&apos; DESC LIMIT 1) AS forme,
+       COALESCE(st.quantite, 0) AS quantite,
+       CASE WHEN st.stock_item_id IS NULL THEN &apos;Non suivi en stock&apos;
+            WHEN st.quantite &lt;= 0 THEN &apos;Rupture&apos;
+            ELSE &apos;En stock&apos; END AS etat
+FROM drug d
+LEFT JOIN (SELECT si.drug_id, MIN(si.stock_item_id) AS stock_item_id, COALESCE(SUM(t.quantity), 0) AS quantite
+             FROM stockmgmt_stock_item si
+             LEFT JOIN stockmgmt_stock_item_transaction t ON t.stock_item_id = si.stock_item_id
+            WHERE si.voided = 0 AND si.drug_id IS NOT NULL
+            GROUP BY si.drug_id) st ON st.drug_id = d.drug_id
+WHERE d.retired = 0
+ORDER BY d.name</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b009'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b009');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b009" retired="false">
+  <name>Tableau de bord - Médicaments</name>
+  <description>Médicaments prescriptibles avec leur stock</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT d.name AS medicament,
+       d.strength AS dosage,
+       (SELECT fcn.name FROM concept_name fcn
+         WHERE fcn.concept_id = d.dosage_form AND fcn.voided = 0 AND fcn.locale_preferred = 1
+         ORDER BY fcn.locale = &apos;fr&apos; DESC, fcn.locale = &apos;en&apos; DESC LIMIT 1) AS forme,
+       COALESCE(st.quantite, 0) AS quantite,
+       CASE WHEN st.stock_item_id IS NULL THEN &apos;Non suivi en stock&apos;
+            WHEN st.quantite &lt;= 0 THEN &apos;Rupture&apos;
+            ELSE &apos;En stock&apos; END AS etat
+FROM drug d
+LEFT JOIN (SELECT si.drug_id, MIN(si.stock_item_id) AS stock_item_id, COALESCE(SUM(t.quantity), 0) AS quantite
+             FROM stockmgmt_stock_item si
+             LEFT JOIN stockmgmt_stock_item_transaction t ON t.stock_item_id = si.stock_item_id
+            WHERE si.voided = 0 AND si.drug_id IS NOT NULL
+            GROUP BY si.drug_id) st ON st.drug_id = d.drug_id
+WHERE d.retired = 0
+ORDER BY d.name</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b009';
+
+-- Tableau de bord - Tarifs
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Tarifs', 'Actes facturables et leurs prix', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b010" retired="false">
+  <name>Tableau de bord - Tarifs</name>
+  <description>Actes facturables et leurs prix</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT s.name AS acte,
+       s.short_name AS code,
+       ip.name AS tarif,
+       ip.price AS prix
+FROM cashier_billable_service s
+JOIN cashier_item_price ip ON ip.service_id = s.service_id AND ip.retired = 0
+WHERE s.retired = 0
+ORDER BY s.name, ip.price</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b010'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b010');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b010" retired="false">
+  <name>Tableau de bord - Tarifs</name>
+  <description>Actes facturables et leurs prix</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT s.name AS acte,
+       s.short_name AS code,
+       ip.name AS tarif,
+       ip.price AS prix
+FROM cashier_billable_service s
+JOIN cashier_item_price ip ON ip.service_id = s.service_id AND ip.retired = 0
+WHERE s.retired = 0
+ORDER BY s.name, ip.price</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b010';
+
+-- Tableau de bord - Impayés
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Impayés', 'Factures non soldées, avec le reste à payer', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b011" retired="false">
+  <name>Tableau de bord - Impayés</name>
+  <description>Factures non soldées, avec le reste à payer</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT p.uuid AS uuid,
+       b.receipt_number AS facture,
+       DATE_FORMAT(b.date_created, &apos;%Y-%m-%d&apos;) AS date_facture,
+       DATEDIFF(CURDATE(), b.date_created) AS jours,
+       pi.identifier AS dossier,
+       CONCAT(pn.family_name, &apos; &apos;, pn.given_name) AS patient,
+       tel.value AS telephone,
+       (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) AS total,
+       (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0) AS paye,
+       (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0) AS reste
+FROM cashier_bill b
+JOIN person p ON p.person_id = b.patient_id
+LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
+LEFT JOIN patient_identifier pi ON pi.patient_id = b.patient_id AND pi.preferred = 1 AND pi.voided = 0
+LEFT JOIN person_attribute tel ON tel.person_id = p.person_id AND tel.voided = 0
+     AND tel.person_attribute_type_id = (SELECT person_attribute_type_id FROM person_attribute_type
+                                         WHERE name = &apos;Téléphone&apos; LIMIT 1)
+WHERE b.voided = 0
+  AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+ORDER BY b.date_created</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b011'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b011');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b011" retired="false">
+  <name>Tableau de bord - Impayés</name>
+  <description>Factures non soldées, avec le reste à payer</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT p.uuid AS uuid,
+       b.receipt_number AS facture,
+       DATE_FORMAT(b.date_created, &apos;%Y-%m-%d&apos;) AS date_facture,
+       DATEDIFF(CURDATE(), b.date_created) AS jours,
+       pi.identifier AS dossier,
+       CONCAT(pn.family_name, &apos; &apos;, pn.given_name) AS patient,
+       tel.value AS telephone,
+       (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) AS total,
+       (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0) AS paye,
+       (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0) AS reste
+FROM cashier_bill b
+JOIN person p ON p.person_id = b.patient_id
+LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
+LEFT JOIN patient_identifier pi ON pi.patient_id = b.patient_id AND pi.preferred = 1 AND pi.voided = 0
+LEFT JOIN person_attribute tel ON tel.person_id = p.person_id AND tel.voided = 0
+     AND tel.person_attribute_type_id = (SELECT person_attribute_type_id FROM person_attribute_type
+                                         WHERE name = &apos;Téléphone&apos; LIMIT 1)
+WHERE b.voided = 0
+  AND (SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li WHERE li.bill_id = b.bill_id AND li.voided = 0) &gt; (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp WHERE bp.bill_id = b.bill_id AND bp.voided = 0)
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+ORDER BY b.date_created</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b011';
+
+-- Tableau de bord - Ventes par acte
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Ventes par acte', 'Quantités et montants facturés par acte sur une période', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b012" retired="false">
+  <name>Tableau de bord - Ventes par acte</name>
+  <description>Quantités et montants facturés par acte sur une période</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>startDate</name><label>Date début</label>
+      <type>java.util.Date</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>endDate</name><label>Date fin</label>
+      <type>java.util.Date</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT COALESCE(s.name, li.price_name, &apos;Non spécifié&apos;) AS acte,
+       SUM(li.quantity) AS quantite,
+       SUM(li.price * li.quantity) AS montant
+FROM cashier_bill b
+JOIN cashier_bill_line_item li ON li.bill_id = b.bill_id AND li.voided = 0
+LEFT JOIN cashier_billable_service s ON s.service_id = li.service_id
+WHERE b.voided = 0
+  AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+GROUP BY COALESCE(s.name, li.price_name, &apos;Non spécifié&apos;)
+ORDER BY montant DESC</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b012'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b012');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b012" retired="false">
+  <name>Tableau de bord - Ventes par acte</name>
+  <description>Quantités et montants facturés par acte sur une période</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>startDate</name><label>Date début</label>
+      <type>java.util.Date</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>endDate</name><label>Date fin</label>
+      <type>java.util.Date</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT COALESCE(s.name, li.price_name, &apos;Non spécifié&apos;) AS acte,
+       SUM(li.quantity) AS quantite,
+       SUM(li.price * li.quantity) AS montant
+FROM cashier_bill b
+JOIN cashier_bill_line_item li ON li.bill_id = b.bill_id AND li.voided = 0
+LEFT JOIN cashier_billable_service s ON s.service_id = li.service_id
+WHERE b.voided = 0
+  AND b.date_created &gt;= DATE(:startDate) AND b.date_created &lt; DATE(:endDate) + INTERVAL 1 DAY
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = b.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+GROUP BY COALESCE(s.name, li.price_name, &apos;Non spécifié&apos;)
+ORDER BY montant DESC</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b012';
 
 SELECT serialized_object_id AS id, name, uuid FROM serialized_object
 WHERE uuid LIKE '0f7a0000-c1c0-4000-8000-00000000b%' ORDER BY uuid;

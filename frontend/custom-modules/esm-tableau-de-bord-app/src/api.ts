@@ -10,6 +10,11 @@ export const DATASETS = {
   facturesDetail: '0f7a0000-c1c0-4000-8000-00000000b005',
   stock: '0f7a0000-c1c0-4000-8000-00000000b006',
   magasins: '0f7a0000-c1c0-4000-8000-00000000b007',
+  indicateurs: '0f7a0000-c1c0-4000-8000-00000000b008',
+  medicaments: '0f7a0000-c1c0-4000-8000-00000000b009',
+  tarifs: '0f7a0000-c1c0-4000-8000-00000000b010',
+  impayes: '0f7a0000-c1c0-4000-8000-00000000b011',
+  ventesParActe: '0f7a0000-c1c0-4000-8000-00000000b012',
 };
 
 export type Row = Record<string, string | number | null>;

@@ -25,6 +25,7 @@ const RecettesTab: React.FC = () => {
   const range = useMemo(() => monthRange(month), [month]);
   const parJour = useDataSet(DATASETS.recettesParJour, range);
   const detail = useDataSet(DATASETS.facturesDetail, { startDate: day, endDate: day });
+  const ventes = useDataSet(DATASETS.ventesParActe, range);
 
   const byDay = useMemo(() => new Map<string, Row>(parJour.rows.map((r) => [String(r.jour), r])), [parJour.rows]);
   const totalMois = useMemo(
@@ -51,6 +52,12 @@ const RecettesTab: React.FC = () => {
     },
     { key: 'total', header: t('total', 'Total'), numeric: true, render: (r) => formatFcfa(r.total) },
     { key: 'paye', header: t('paye', 'Payé'), numeric: true, render: (r) => formatFcfa(r.paye) },
+  ];
+
+  const ventesColumns: Array<Column> = [
+    { key: 'acte', header: t('acte', 'Acte ou examen') },
+    { key: 'quantite', header: t('quantite', 'Quantité'), numeric: true, render: (r) => num(r.quantite) },
+    { key: 'montant', header: t('montantFacture', 'Montant facturé'), numeric: true, render: (r) => formatFcfa(r.montant) },
   ];
 
   return (
@@ -109,6 +116,14 @@ const RecettesTab: React.FC = () => {
         error={detail.error}
         emptyText={t('aucuneFacture', 'Aucune facture ce jour-là (0 FCFA).')}
         onRowClick={openPatientChart}
+      />
+      <h4 className={styles.sectionTitle}>{t('ventesParActe', 'Ventes du mois par acte')}</h4>
+      <DataTable
+        columns={ventesColumns}
+        rows={ventes.rows}
+        loading={ventes.loading}
+        error={ventes.error}
+        emptyText={t('aucuneVente', 'Aucune vente ce mois-ci (0 FCFA).')}
       />
     </>
   );
