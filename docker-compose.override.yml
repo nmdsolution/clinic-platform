@@ -4,6 +4,10 @@ services:
   gateway:
     build:
       context: ./gateway
+    environment:
+      # Assistant IA : à renseigner dans le .env du serveur (pas dans le dépôt)
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-latest}
 
   frontend:
     build:

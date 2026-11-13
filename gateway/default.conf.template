@@ -92,6 +92,30 @@ server {
     proxy_cookie_path /openmrs /;
   }
 
+  # Assistant IA : appel à Gemini avec la clé du serveur (jamais envoyée au navigateur),
+  # réservé aux utilisateurs connectés à OpenMRS (vérifié par /assistant-api/auth).
+  location = /assistant-api/generate {
+    auth_request /assistant-api/auth;
+    limit_except POST { deny all; }
+    client_max_body_size 256k;
+    proxy_set_header Host generativelanguage.googleapis.com;
+    proxy_set_header Cookie "";
+    proxy_set_header Authorization "";
+    proxy_set_header x-goog-api-key "${GEMINI_API_KEY}";
+    proxy_ssl_server_name on;
+    proxy_read_timeout 120s;
+    set $gemini https://generativelanguage.googleapis.com;
+    proxy_pass $gemini/v1beta/models/${GEMINI_MODEL}:generateContent;
+  }
+
+  location = /assistant-api/auth {
+    internal;
+    set $backend http://backend:8080;
+    proxy_pass_request_body off;
+    proxy_set_header Content-Length "";
+    proxy_pass $backend/openmrs/ws/rest/v1/visittype?limit=1&v=ref;
+  }
+
   location /caisse/ {
     set $caisse http://caisse:8000;
     rewrite ^/caisse/(.*) /$1 break;

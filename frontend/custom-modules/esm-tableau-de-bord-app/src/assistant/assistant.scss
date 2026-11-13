@@ -1,0 +1,134 @@
+.bouton {
+  color: #ffffff;
+}
+
+// Panneau fixé à droite, sous la barre verte
+.panneau {
+  position: fixed;
+  top: 3rem;
+  right: 0;
+  bottom: 0;
+  z-index: 8000;
+  display: flex;
+  flex-direction: column;
+  width: min(28rem, 100vw);
+  background: #ffffff;
+  border-left: 1px solid #c6c6c6;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+.entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #005d5d;
+  color: #ffffff;
+}
+
+.titre {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.fermer {
+  display: flex;
+  padding: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.messages {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.accueil {
+  font-size: 0.9rem;
+  color: #393939;
+
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.avertissement {
+  padding: 0.5rem 0.75rem;
+  background: #fff8e1;
+  border-left: 3px solid #f1c21b;
+  font-size: 0.8rem;
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.suggestion {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #005d5d;
+  background: #ffffff;
+  color: #005d5d;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: #d9fbfb;
+  }
+}
+
+.question {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  background: #005d5d;
+  color: #ffffff;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+
+.reponse {
+  align-self: flex-start;
+  max-width: 95%;
+  padding: 0.6rem 0.8rem;
+  background: #f4f4f4;
+  font-size: 0.9rem;
+}
+
+.ligne {
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+
+  &:empty {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.erreur {
+  padding: 0.5rem 0.75rem;
+  background: #fff1f1;
+  border-left: 3px solid #da1e28;
+  font-size: 0.85rem;
+}
+
+.saisie {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e0e0e0;
+
+  > :first-child {
+    flex: 1 1 auto;
+  }
+}

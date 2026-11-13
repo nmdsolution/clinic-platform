@@ -2,6 +2,10 @@
 FROM nginx:1.31-alpine
 
 ENV FRAME_ANCESTORS=""
+# Assistant IA (Gemini) : la clé vient du .env du serveur, jamais du dépôt.
+# Valeurs par défaut pour que envsubst remplace toujours ces variables.
+ENV GEMINI_API_KEY=""
+ENV GEMINI_MODEL="gemini-flash-latest"
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf.template /etc/nginx/conf-templates/

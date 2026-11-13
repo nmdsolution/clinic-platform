@@ -27,3 +27,6 @@ export const ventesModule = getAsyncLifecycle(() => import('./modules/ventes-mod
 
 /** Barre des modules dans l'en-tête (top-nav-info-slot), à la manière de Dolibarr */
 export const barreModules = getAsyncLifecycle(() => import('./barre-modules/barre-modules.component'), options);
+
+/** Assistant IA (Gemini via la passerelle) : bouton dans la barre du haut */
+export const assistantBouton = getAsyncLifecycle(() => import('./assistant/assistant-bouton.component'), options);

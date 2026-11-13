@@ -1,6 +1,6 @@
 {
   "name": "@face/esm-tableau-de-bord-app",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "license": "MPL-2.0",
   "description": "Tableau de bord de la Fondation Médicale FASSE : patients, consultations, recettes et stock - interface OpenMRS 3 (O3)",
   "browser": "dist/openmrs-esm-tableau-de-bord-app.js",

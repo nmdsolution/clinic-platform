@@ -28,6 +28,13 @@
       "slot": "top-nav-info-slot",
       "online": true,
       "offline": false
+    },
+    {
+      "name": "assistant-ia",
+      "component": "assistantBouton",
+      "slot": "top-nav-actions-slot",
+      "online": true,
+      "offline": false
     }
   ]
 }
