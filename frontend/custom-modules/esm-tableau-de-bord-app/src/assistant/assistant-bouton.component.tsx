@@ -70,7 +70,11 @@ const AssistantBouton: React.FC = () => {
   const [erreur, setErreur] = useState<string | null>(null);
   const finRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => finRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages, envoi]);
+  // Accolades obligatoires : Chrome récent fait renvoyer une promesse à scrollIntoView,
+  // que React prendrait pour une fonction de nettoyage (« t is not a function »).
+  useEffect(() => {
+    finRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, envoi]);
 
   const envoyer = async (question: string) => {
     const q = question.trim();
