@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, NavLink } from 'react-router-dom';
-import { useSession } from '@openmrs/esm-framework';
+import { ConfigurableLink, useSession } from '@openmrs/esm-framework';
 import { Home } from '@carbon/react/icons';
 import styles from './module-layout.scss';
 
@@ -8,6 +8,8 @@ export interface Section {
   /** Sous-chemin dans le module ('' pour la page d'entrée) */
   path: string;
   label: string;
+  /** Écran d'un autre module (chemin après /openmrs/spa/) : le lien y mène directement */
+  externe?: string;
 }
 
 interface Props {
@@ -39,7 +41,12 @@ const ModuleLayout: React.FC<Props> = ({ base, title, icon: Icon, sections = [],
       <div className={styles.page}>
         {sections.length > 0 && (
           <nav className={styles.sidebar} aria-label={title}>
-            {sections.map((s) => (
+            {sections.map((s) =>
+              s.externe ? (
+                <ConfigurableLink key={s.label} to={`\${openmrsSpaBase}${s.externe}`} className={styles.navItem}>
+                  {s.label}
+                </ConfigurableLink>
+              ) : (
               <NavLink
                 key={s.path}
                 to={`/${s.path}`}
@@ -47,7 +54,8 @@ const ModuleLayout: React.FC<Props> = ({ base, title, icon: Icon, sections = [],
                 className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navActive : ''}`}>
                 {s.label}
               </NavLink>
-            ))}
+              ),
+            )}
           </nav>
         )}
         <main className={styles.main}>

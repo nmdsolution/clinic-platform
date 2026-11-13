@@ -14,7 +14,7 @@ const MedicamentsModule: React.FC = () => (
     icon={Pills}
     sections={[
       { path: '', label: 'Catalogue' },
-      { path: 'stock', label: 'Stock' },
+      { path: 'stock', label: 'Stock', externe: 'stock-management' },
     ]}>
     <Routes>
       <Route path="/" element={<MedicamentsTab />} />
