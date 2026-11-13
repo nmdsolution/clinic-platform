@@ -7,6 +7,18 @@
     {
       "component": "root",
       "route": "tableau-de-bord"
+    },
+    {
+      "component": "patientsModule",
+      "route": "patients"
+    },
+    {
+      "component": "medicamentsModule",
+      "route": "medicaments"
+    },
+    {
+      "component": "ventesModule",
+      "route": "ventes"
     }
   ],
   "extensions": [

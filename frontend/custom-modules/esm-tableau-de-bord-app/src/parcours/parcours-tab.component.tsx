@@ -11,14 +11,9 @@ interface Etape {
   qui: string;
   quoi: string;
   action: string;
-  /** Chemin dans l'application, ou nom d'un onglet de ce tableau de bord */
-  to?: string;
-  onglet?: string;
+  /** Chemin dans l'application, après /openmrs/spa/ */
+  to: string;
   chiffre?: string;
-}
-
-interface Props {
-  onOpenTab: (onglet: string) => void;
 }
 
 /**
@@ -26,7 +21,7 @@ interface Props {
  * on enregistre, on paie à la caisse, puis on est reçu ; les examens et les
  * médicaments se paient avant d'être réalisés ou remis.
  */
-const ParcoursTab: React.FC<Props> = ({ onOpenTab }) => {
+const ParcoursTab: React.FC = () => {
   const { t } = useTranslation();
   const { rows, loading, error } = useDataSet(DATASETS.indicateurs);
   const k = rows[0] ?? {};
@@ -85,27 +80,13 @@ const ParcoursTab: React.FC<Props> = ({ onOpenTab }) => {
       qui: 'Caissier',
       quoi: 'Vérifier que tout est soldé avant le départ du patient et suivre les factures restées impayées.',
       action: 'Voir les impayés',
-      onglet: 'impayes',
+      to: 'ventes/impayes',
       chiffre: `${n('impayes_nb')} facture(s) impayée(s), ${loading ? '…' : formatFcfa(k.impayes_montant)} à recouvrer`,
     },
   ];
 
-  const gestion: Array<Etape> = [
-    { titre: 'Recettes', qui: '', quoi: 'Encaissé et facturé par jour, ventes par acte.', action: 'Voir les recettes', onglet: 'recettes' },
-    { titre: 'Tarifs', qui: '', quoi: 'Prix de tous les actes et examens.', action: 'Voir les tarifs', onglet: 'tarifs' },
-    { titre: 'Médicaments', qui: '', quoi: 'Liste des médicaments et quantité en stock.', action: 'Voir les médicaments', onglet: 'medicaments' },
-    { titre: 'Stock', qui: '', quoi: 'Réceptions, sorties et inventaires par magasin.', action: 'Gérer le stock', to: 'stock-management' },
-    { titre: 'Rendez-vous', qui: '', quoi: 'Planifier et suivre les rendez-vous.', action: 'Ouvrir les rendez-vous', to: 'home/appointments' },
-    { titre: 'Rapports', qui: '', quoi: 'Rapports à exporter (Excel).', action: 'Ouvrir les rapports', to: 'reports' },
-  ];
 
-  const open = (e: Etape) => {
-    if (e.onglet) {
-      onOpenTab(e.onglet);
-    } else if (e.to !== undefined) {
-      navigate({ to: `\${openmrsSpaBase}/${e.to}` });
-    }
-  };
+  const open = (e: Etape) => navigate({ to: `\${openmrsSpaBase}/${e.to}` });
 
   return (
     <>
@@ -131,18 +112,6 @@ const ParcoursTab: React.FC<Props> = ({ onOpenTab }) => {
           </li>
         ))}
       </ol>
-      <h4 className={styles.gestionTitle}>{t('gestion', 'Gestion de la clinique')}</h4>
-      <div className={styles.gestion}>
-        {gestion.map((e) => (
-          <button key={e.titre} type="button" className={styles.gestionCard} onClick={() => open(e)}>
-            <span className={styles.stepTitle}>{e.titre}</span>
-            <span className={styles.stepWhat}>{e.quoi}</span>
-            <span className={styles.stepAction}>
-              {e.action} <ArrowRight size={16} />
-            </span>
-          </button>
-        ))}
-      </div>
     </>
   );
 };

@@ -1,0 +1,113 @@
+// Même structure visuelle que le module « Gestion des Stocks »
+.page {
+  display: flex;
+  min-height: calc(100vh - 3rem);
+  background: #f4f4f4;
+}
+
+.sidebar {
+  display: flex;
+  flex: 0 0 16rem;
+  flex-direction: column;
+  padding-top: 1rem;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+}
+
+.navItem {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #161616;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    background: #e8e8e8;
+    color: #161616;
+    text-decoration: none;
+  }
+}
+
+.navActive {
+  background: #e0e0e0;
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background: #d9fbfb;
+  color: #005d5d;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerKicker {
+  font-size: 1rem;
+  color: #525252;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.headerMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-left: auto;
+  font-size: 1rem;
+  color: #393939;
+}
+
+.content {
+  padding: 1rem 1.5rem 2rem;
+}
+
+// Petit écran : le menu du module passe en ligne au-dessus du contenu
+@media (max-width: 672px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex: 0 0 auto;
+    flex-direction: row;
+    padding-top: 0;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .navItem {
+    white-space: nowrap;
+  }
+
+  .headerTitle {
+    font-size: 1.5rem;
+  }
+}

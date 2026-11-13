@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Checkbox, InlineNotification, Search, Tag } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
+import { useNavigate } from 'react-router-dom';
 import { DATASETS, num, text, useDataSet } from '../api';
 import DataTable, { type Column } from '../data-table.component';
 import AjoutMedicament from './ajout-medicament.component';
@@ -16,10 +17,16 @@ const ETATS: Record<string, 'green' | 'red' | 'gray'> = {
 const qte = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
 
 /** Médicaments prescriptibles et leur stock : remplace la lecture de l'écran d'administration */
-const MedicamentsTab: React.FC = () => {
+interface Props {
+  /** Ouvre directement le formulaire (entrée « Ajouter un médicament » du menu) */
+  ouvrirAjout?: boolean;
+}
+
+const MedicamentsTab: React.FC<Props> = ({ ouvrirAjout = false }) => {
   const { t } = useTranslation();
+  const goTo = useNavigate();
   const { rows, loading, error, reload } = useDataSet(DATASETS.medicaments);
-  const [ajoutOuvert, setAjoutOuvert] = useState(false);
+  const [ajoutOuvert, setAjoutOuvert] = useState(ouvrirAjout);
   const [cree, setCree] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [suivisSeulement, setSuivisSeulement] = useState(false);
@@ -92,9 +99,13 @@ const MedicamentsTab: React.FC = () => {
       />
       <AjoutMedicament
         open={ajoutOuvert}
-        onClose={() => setAjoutOuvert(false)}
+        onClose={() => {
+          setAjoutOuvert(false);
+          if (ouvrirAjout) goTo('/');
+        }}
         onCreated={(nom) => {
           setAjoutOuvert(false);
+          if (ouvrirAjout) goTo('/');
           setCree(nom);
           setQuery(nom);
           reload();

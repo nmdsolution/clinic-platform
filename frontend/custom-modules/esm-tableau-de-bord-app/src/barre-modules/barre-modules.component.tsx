@@ -7,6 +7,7 @@ import {
   Home,
   Medication,
   Pills,
+  Receipt,
   Report,
   UserMultiple,
 } from '@carbon/react/icons';
@@ -14,7 +15,7 @@ import styles from './barre-modules.scss';
 
 interface Module {
   label: string;
-  /** Chemin après /openmrs/spa/ (avec éventuellement ?onglet=...) */
+  /** Chemin après /openmrs/spa/ */
   to: string;
   icon: typeof Home;
 }
@@ -23,9 +24,10 @@ interface Module {
 // de gauche de l'Accueil : on ne les répète pas ici.
 const MODULES: Array<Module> = [
   { label: 'Accueil', to: 'home', icon: Home },
-  { label: 'Patients', to: 'tableau-de-bord?onglet=patients', icon: UserMultiple },
+  { label: 'Patients', to: 'patients', icon: UserMultiple },
   { label: 'Pharmacie', to: 'dispensing', icon: Medication },
-  { label: 'Médicaments', to: 'tableau-de-bord?onglet=medicaments', icon: Pills },
+  { label: 'Médicaments', to: 'medicaments', icon: Pills },
+  { label: 'Ventes', to: 'ventes', icon: Receipt },
   { label: 'Stock', to: 'stock-management', icon: Box },
   { label: 'Tableau de bord', to: 'tableau-de-bord', icon: Dashboard },
   { label: 'Rapports', to: 'reports', icon: Report },

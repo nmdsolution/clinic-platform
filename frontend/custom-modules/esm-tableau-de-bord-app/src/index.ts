@@ -17,8 +17,13 @@ export const importTranslation = (require as any).context('../translations', fal
 
 export function startupApp() {}
 
-/** Page complète, montée sur la route /openmrs/spa/tableau-de-bord */
+/** Tableau de bord : /openmrs/spa/tableau-de-bord */
 export const root = getAsyncLifecycle(() => import('./root.component'), options);
+
+/** Modules structurés comme « Gestion des Stocks » (menu à gauche, en-tête, contenu) */
+export const patientsModule = getAsyncLifecycle(() => import('./modules/patients-module.component'), options);
+export const medicamentsModule = getAsyncLifecycle(() => import('./modules/medicaments-module.component'), options);
+export const ventesModule = getAsyncLifecycle(() => import('./modules/ventes-module.component'), options);
 
 /** Barre des modules dans l'en-tête (top-nav-info-slot), à la manière de Dolibarr */
 export const barreModules = getAsyncLifecycle(() => import('./barre-modules/barre-modules.component'), options);
