@@ -3,14 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { ConfigurableLink } from '@openmrs/esm-framework';
 import {
   Box,
-  Calendar,
-  Chemistry,
   Dashboard,
   Home,
-  Hourglass,
   Medication,
   Pills,
-  Receipt,
   Report,
   UserMultiple,
 } from '@carbon/react/icons';
@@ -23,13 +19,11 @@ interface Module {
   icon: typeof Home;
 }
 
+// Files d'attente, Rendez-vous, Laboratoire et facturation sont déjà dans le menu
+// de gauche de l'Accueil : on ne les répète pas ici.
 const MODULES: Array<Module> = [
   { label: 'Accueil', to: 'home', icon: Home },
   { label: 'Patients', to: 'tableau-de-bord?onglet=patients', icon: UserMultiple },
-  { label: 'Attente', to: 'home/service-queues', icon: Hourglass },
-  { label: 'Rendez-vous', to: 'home/appointments', icon: Calendar },
-  { label: 'Caisse', to: 'home/billing', icon: Receipt },
-  { label: 'Laboratoire', to: 'home/laboratory', icon: Chemistry },
   { label: 'Pharmacie', to: 'dispensing', icon: Medication },
   { label: 'Médicaments', to: 'tableau-de-bord?onglet=medicaments', icon: Pills },
   { label: 'Stock', to: 'stock-management', icon: Box },
