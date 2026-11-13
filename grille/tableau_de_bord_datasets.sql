@@ -504,7 +504,7 @@ SELECT 'Tableau de bord - Magasins', 'Lieux de stockage (tags Main Store / Main 
   <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
   <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
   <parameters id="5"/>
-  <sqlQuery>SELECT DISTINCT l.name AS magasin
+  <sqlQuery>SELECT DISTINCT l.uuid AS uuid, l.name AS magasin
 FROM location l
 JOIN location_tag_map m ON m.location_id = l.location_id
 JOIN location_tag lt ON lt.location_tag_id = m.location_tag_id
@@ -520,7 +520,7 @@ UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.da
   <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
   <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
   <parameters id="5"/>
-  <sqlQuery>SELECT DISTINCT l.name AS magasin
+  <sqlQuery>SELECT DISTINCT l.uuid AS uuid, l.name AS magasin
 FROM location l
 JOIN location_tag_map m ON m.location_id = l.location_id
 JOIN location_tag lt ON lt.location_tag_id = m.location_tag_id
@@ -652,7 +652,8 @@ SELECT 'Tableau de bord - Médicaments', 'Médicaments prescriptibles avec leur 
   <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
   <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
   <parameters id="5"/>
-  <sqlQuery>SELECT d.name AS medicament,
+  <sqlQuery>SELECT d.uuid AS uuid,
+       d.name AS medicament,
        d.strength AS dosage,
        (SELECT fcn.name FROM concept_name fcn
          WHERE fcn.concept_id = d.dosage_form AND fcn.voided = 0 AND fcn.locale_preferred = 1
@@ -679,7 +680,8 @@ UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.da
   <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
   <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
   <parameters id="5"/>
-  <sqlQuery>SELECT d.name AS medicament,
+  <sqlQuery>SELECT d.uuid AS uuid,
+       d.name AS medicament,
        d.strength AS dosage,
        (SELECT fcn.name FROM concept_name fcn
          WHERE fcn.concept_id = d.dosage_form AND fcn.voided = 0 AND fcn.locale_preferred = 1
@@ -914,6 +916,218 @@ WHERE c.retired = 0
 ORDER BY forme</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
 WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b013';
+
+-- Tableau de bord - Fiche médicament
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Fiche médicament', 'Informations et fiche de stock d''un médicament', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b014" retired="false">
+  <name>Tableau de bord - Fiche médicament</name>
+  <description>Informations et fiche de stock d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT d.uuid AS uuid,
+       d.name AS nom,
+       d.strength AS dosage,
+       f.uuid AS forme_uuid,
+       (SELECT cn.name FROM concept_name cn WHERE cn.concept_id = d.dosage_form AND cn.voided = 0
+         AND cn.locale_preferred = 1 ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS forme,
+       (SELECT cn.name FROM concept_name cn WHERE cn.concept_id = d.concept_id AND cn.voided = 0
+         AND cn.locale_preferred = 1 ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS dci,
+       si.uuid AS stock_item_uuid,
+       si.has_expiration AS avec_peremption,
+       si.reorder_level AS seuil,
+       (SELECT u.uuid FROM stockmgmt_stock_item_packaging_uom u WHERE u.stock_item_id = si.stock_item_id
+         AND u.voided = 0 ORDER BY u.factor LIMIT 1) AS uom_uuid,
+       (SELECT cn.name FROM stockmgmt_stock_item_packaging_uom u JOIN concept_name cn ON cn.concept_id = u.packaging_uom_id
+         AND cn.voided = 0 AND cn.locale_preferred = 1
+         WHERE u.stock_item_id = si.stock_item_id AND u.voided = 0 ORDER BY u.factor LIMIT 1) AS unite,
+       (SELECT c.uuid FROM stockmgmt_stock_item_packaging_uom u JOIN concept c ON c.concept_id = u.packaging_uom_id
+         WHERE u.voided = 0 GROUP BY c.uuid ORDER BY COUNT(*) DESC LIMIT 1) AS unite_defaut_uuid,
+       (SELECT COALESCE(SUM(t.quantity), 0) FROM stockmgmt_stock_item_transaction t
+         WHERE t.stock_item_id = si.stock_item_id) AS quantite
+FROM drug d
+LEFT JOIN concept f ON f.concept_id = d.dosage_form
+LEFT JOIN stockmgmt_stock_item si ON si.stock_item_id = (SELECT si.stock_item_id FROM stockmgmt_stock_item si JOIN drug d ON d.drug_id = si.drug_id
+       WHERE si.voided = 0 AND d.uuid = :drugUuid ORDER BY si.stock_item_id LIMIT 1)
+WHERE d.uuid = :drugUuid</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b014'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b014');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b014" retired="false">
+  <name>Tableau de bord - Fiche médicament</name>
+  <description>Informations et fiche de stock d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT d.uuid AS uuid,
+       d.name AS nom,
+       d.strength AS dosage,
+       f.uuid AS forme_uuid,
+       (SELECT cn.name FROM concept_name cn WHERE cn.concept_id = d.dosage_form AND cn.voided = 0
+         AND cn.locale_preferred = 1 ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS forme,
+       (SELECT cn.name FROM concept_name cn WHERE cn.concept_id = d.concept_id AND cn.voided = 0
+         AND cn.locale_preferred = 1 ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS dci,
+       si.uuid AS stock_item_uuid,
+       si.has_expiration AS avec_peremption,
+       si.reorder_level AS seuil,
+       (SELECT u.uuid FROM stockmgmt_stock_item_packaging_uom u WHERE u.stock_item_id = si.stock_item_id
+         AND u.voided = 0 ORDER BY u.factor LIMIT 1) AS uom_uuid,
+       (SELECT cn.name FROM stockmgmt_stock_item_packaging_uom u JOIN concept_name cn ON cn.concept_id = u.packaging_uom_id
+         AND cn.voided = 0 AND cn.locale_preferred = 1
+         WHERE u.stock_item_id = si.stock_item_id AND u.voided = 0 ORDER BY u.factor LIMIT 1) AS unite,
+       (SELECT c.uuid FROM stockmgmt_stock_item_packaging_uom u JOIN concept c ON c.concept_id = u.packaging_uom_id
+         WHERE u.voided = 0 GROUP BY c.uuid ORDER BY COUNT(*) DESC LIMIT 1) AS unite_defaut_uuid,
+       (SELECT COALESCE(SUM(t.quantity), 0) FROM stockmgmt_stock_item_transaction t
+         WHERE t.stock_item_id = si.stock_item_id) AS quantite
+FROM drug d
+LEFT JOIN concept f ON f.concept_id = d.dosage_form
+LEFT JOIN stockmgmt_stock_item si ON si.stock_item_id = (SELECT si.stock_item_id FROM stockmgmt_stock_item si JOIN drug d ON d.drug_id = si.drug_id
+       WHERE si.voided = 0 AND d.uuid = :drugUuid ORDER BY si.stock_item_id LIMIT 1)
+WHERE d.uuid = :drugUuid</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b014';
+
+-- Tableau de bord - Fiche médicament stock
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Fiche médicament stock', 'Stock d''un médicament par magasin et par lot', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b015" retired="false">
+  <name>Tableau de bord - Fiche médicament stock</name>
+  <description>Stock d''un médicament par magasin et par lot</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT loc.uuid AS location_uuid,
+       loc.name AS magasin,
+       sb.uuid AS batch_uuid,
+       sb.batch_no AS lot,
+       DATE_FORMAT(sb.expiration, &apos;%Y-%m-%d&apos;) AS peremption,
+       SUM(t.quantity) AS quantite
+FROM stockmgmt_stock_item_transaction t
+JOIN stockmgmt_stock_item si ON si.stock_item_id = t.stock_item_id AND si.voided = 0
+JOIN drug d ON d.drug_id = si.drug_id AND d.uuid = :drugUuid
+JOIN stockmgmt_party pa ON pa.party_id = t.party_id
+JOIN location loc ON loc.location_id = pa.location_id
+LEFT JOIN stockmgmt_stock_batch sb ON sb.stock_batch_id = t.stock_batch_id
+GROUP BY loc.location_id, sb.stock_batch_id
+ORDER BY magasin, peremption</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b015'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b015');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b015" retired="false">
+  <name>Tableau de bord - Fiche médicament stock</name>
+  <description>Stock d''un médicament par magasin et par lot</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT loc.uuid AS location_uuid,
+       loc.name AS magasin,
+       sb.uuid AS batch_uuid,
+       sb.batch_no AS lot,
+       DATE_FORMAT(sb.expiration, &apos;%Y-%m-%d&apos;) AS peremption,
+       SUM(t.quantity) AS quantite
+FROM stockmgmt_stock_item_transaction t
+JOIN stockmgmt_stock_item si ON si.stock_item_id = t.stock_item_id AND si.voided = 0
+JOIN drug d ON d.drug_id = si.drug_id AND d.uuid = :drugUuid
+JOIN stockmgmt_party pa ON pa.party_id = t.party_id
+JOIN location loc ON loc.location_id = pa.location_id
+LEFT JOIN stockmgmt_stock_batch sb ON sb.stock_batch_id = t.stock_batch_id
+GROUP BY loc.location_id, sb.stock_batch_id
+ORDER BY magasin, peremption</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b015';
+
+-- Tableau de bord - Fiche médicament historique
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Fiche médicament historique', 'Mouvements de stock d''un médicament', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b016" retired="false">
+  <name>Tableau de bord - Fiche médicament historique</name>
+  <description>Mouvements de stock d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT DATE_FORMAT(t.date_created, &apos;%Y-%m-%d %H:%i&apos;) AS date,
+       COALESCE(ot.name, CASE WHEN t.patient_id IS NOT NULL THEN &apos;Dispensation&apos; ELSE &apos;Mouvement&apos; END) AS operation,
+       o.operation_number AS numero,
+       loc.name AS magasin,
+       sb.batch_no AS lot,
+       t.quantity AS quantite,
+       o.remarks AS motif,
+       CONCAT(pn.given_name, &apos; &apos;, pn.family_name) AS par
+FROM stockmgmt_stock_item_transaction t
+JOIN stockmgmt_stock_item si ON si.stock_item_id = t.stock_item_id
+JOIN drug d ON d.drug_id = si.drug_id AND d.uuid = :drugUuid
+LEFT JOIN stockmgmt_stock_operation o ON o.stock_operation_id = t.stock_operation_id
+LEFT JOIN stockmgmt_stock_operation_type ot ON ot.stock_operation_type_id = o.operation_type_id
+LEFT JOIN stockmgmt_party pa ON pa.party_id = t.party_id
+LEFT JOIN location loc ON loc.location_id = pa.location_id
+LEFT JOIN stockmgmt_stock_batch sb ON sb.stock_batch_id = t.stock_batch_id
+LEFT JOIN users u ON u.user_id = t.creator
+LEFT JOIN person_name pn ON pn.person_id = u.person_id AND pn.preferred = 1 AND pn.voided = 0
+ORDER BY t.date_created DESC, t.stock_item_transaction_id DESC</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b016'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b016');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b016" retired="false">
+  <name>Tableau de bord - Fiche médicament historique</name>
+  <description>Mouvements de stock d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5">
+    <org.openmrs.module.reporting.evaluation.parameter.Parameter>
+      <name>drugUuid</name><label>Médicament (UUID)</label>
+      <type>java.lang.String</type>
+    </org.openmrs.module.reporting.evaluation.parameter.Parameter>
+  </parameters>
+  <sqlQuery>SELECT DATE_FORMAT(t.date_created, &apos;%Y-%m-%d %H:%i&apos;) AS date,
+       COALESCE(ot.name, CASE WHEN t.patient_id IS NOT NULL THEN &apos;Dispensation&apos; ELSE &apos;Mouvement&apos; END) AS operation,
+       o.operation_number AS numero,
+       loc.name AS magasin,
+       sb.batch_no AS lot,
+       t.quantity AS quantite,
+       o.remarks AS motif,
+       CONCAT(pn.given_name, &apos; &apos;, pn.family_name) AS par
+FROM stockmgmt_stock_item_transaction t
+JOIN stockmgmt_stock_item si ON si.stock_item_id = t.stock_item_id
+JOIN drug d ON d.drug_id = si.drug_id AND d.uuid = :drugUuid
+LEFT JOIN stockmgmt_stock_operation o ON o.stock_operation_id = t.stock_operation_id
+LEFT JOIN stockmgmt_stock_operation_type ot ON ot.stock_operation_type_id = o.operation_type_id
+LEFT JOIN stockmgmt_party pa ON pa.party_id = t.party_id
+LEFT JOIN location loc ON loc.location_id = pa.location_id
+LEFT JOIN stockmgmt_stock_batch sb ON sb.stock_batch_id = t.stock_batch_id
+LEFT JOIN users u ON u.user_id = t.creator
+LEFT JOIN person_name pn ON pn.person_id = u.person_id AND pn.preferred = 1 AND pn.voided = 0
+ORDER BY t.date_created DESC, t.stock_item_transaction_id DESC</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b016';
 
 SELECT serialized_object_id AS id, name, uuid FROM serialized_object
 WHERE uuid LIKE '0f7a0000-c1c0-4000-8000-00000000b%' ORDER BY uuid;

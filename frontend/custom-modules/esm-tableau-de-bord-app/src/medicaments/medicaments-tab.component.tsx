@@ -17,16 +17,11 @@ const ETATS: Record<string, 'green' | 'red' | 'gray'> = {
 const qte = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
 
 /** Médicaments prescriptibles et leur stock : remplace la lecture de l'écran d'administration */
-interface Props {
-  /** Ouvre directement le formulaire (entrée « Ajouter un médicament » du menu) */
-  ouvrirAjout?: boolean;
-}
-
-const MedicamentsTab: React.FC<Props> = ({ ouvrirAjout = false }) => {
+const MedicamentsTab: React.FC = () => {
   const { t } = useTranslation();
   const goTo = useNavigate();
   const { rows, loading, error, reload } = useDataSet(DATASETS.medicaments);
-  const [ajoutOuvert, setAjoutOuvert] = useState(ouvrirAjout);
+  const [ajoutOuvert, setAjoutOuvert] = useState(false);
   const [cree, setCree] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [suivisSeulement, setSuivisSeulement] = useState(false);
@@ -96,16 +91,13 @@ const MedicamentsTab: React.FC<Props> = ({ ouvrirAjout = false }) => {
         loading={loading}
         error={error}
         emptyText={t('aucunMedicament', 'Aucun médicament ne correspond à la recherche.')}
+        onRowClick={(r) => goTo(`/fiche/${r.uuid}`)}
       />
       <AjoutMedicament
         open={ajoutOuvert}
-        onClose={() => {
-          setAjoutOuvert(false);
-          if (ouvrirAjout) goTo('/');
-        }}
+        onClose={() => setAjoutOuvert(false)}
         onCreated={(nom) => {
           setAjoutOuvert(false);
-          if (ouvrirAjout) goTo('/');
           setCree(nom);
           setQuery(nom);
           reload();

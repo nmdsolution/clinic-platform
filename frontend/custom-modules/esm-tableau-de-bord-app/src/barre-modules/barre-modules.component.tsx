@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConfigurableLink } from '@openmrs/esm-framework';
 import {
-  Box,
   Dashboard,
   Home,
   Medication,
@@ -28,7 +27,6 @@ const MODULES: Array<Module> = [
   { label: 'Pharmacie', to: 'dispensing', icon: Medication },
   { label: 'Médicaments', to: 'medicaments', icon: Pills },
   { label: 'Ventes', to: 'ventes', icon: Receipt },
-  { label: 'Stock', to: 'stock-management', icon: Box },
   { label: 'Tableau de bord', to: 'tableau-de-bord', icon: Dashboard },
   { label: 'Rapports', to: 'reports', icon: Report },
 ];

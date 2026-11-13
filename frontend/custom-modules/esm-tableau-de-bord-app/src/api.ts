@@ -16,6 +16,9 @@ export const DATASETS = {
   impayes: '0f7a0000-c1c0-4000-8000-00000000b011',
   ventesParActe: '0f7a0000-c1c0-4000-8000-00000000b012',
   formes: '0f7a0000-c1c0-4000-8000-00000000b013',
+  ficheInfo: '0f7a0000-c1c0-4000-8000-00000000b014',
+  ficheStock: '0f7a0000-c1c0-4000-8000-00000000b015',
+  ficheHistorique: '0f7a0000-c1c0-4000-8000-00000000b016',
 };
 
 export type Row = Record<string, string | number | null>;

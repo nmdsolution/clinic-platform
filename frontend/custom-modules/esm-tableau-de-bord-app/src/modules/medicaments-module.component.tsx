@@ -3,8 +3,10 @@ import { Route, Routes } from 'react-router-dom';
 import { Pills } from '@carbon/react/icons';
 import ModuleLayout from '../layout/module-layout.component';
 import MedicamentsTab from '../medicaments/medicaments-tab.component';
+import FicheMedicament from '../medicaments/fiche-medicament.component';
+import StockTab from '../stock/stock-tab.component';
 
-/** Module Médicaments : /openmrs/spa/medicaments */
+/** Module Médicaments : /openmrs/spa/medicaments (catalogue, fiche de chaque médicament, stock) */
 const MedicamentsModule: React.FC = () => (
   <ModuleLayout
     base="medicaments"
@@ -12,11 +14,12 @@ const MedicamentsModule: React.FC = () => (
     icon={Pills}
     sections={[
       { path: '', label: 'Catalogue' },
-      { path: 'ajouter', label: 'Ajouter un médicament' },
+      { path: 'stock', label: 'Stock' },
     ]}>
     <Routes>
       <Route path="/" element={<MedicamentsTab />} />
-      <Route path="/ajouter" element={<MedicamentsTab ouvrirAjout />} />
+      <Route path="/fiche/:uuid" element={<FicheMedicament />} />
+      <Route path="/stock" element={<StockTab />} />
     </Routes>
   </ModuleLayout>
 );
