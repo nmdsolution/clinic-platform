@@ -43,7 +43,7 @@ const ModuleLayout: React.FC<Props> = ({ base, title, icon: Icon, sections = [],
           <nav className={styles.sidebar} aria-label={title}>
             {sections.map((s) =>
               s.externe ? (
-                <ConfigurableLink key={s.label} to={`\${openmrsSpaBase}${s.externe}`} className={styles.navItem}>
+                <ConfigurableLink key={s.label} to={`\${openmrsSpaBase}/${s.externe}`} className={styles.navItem}>
                   {s.label}
                 </ConfigurableLink>
               ) : (
