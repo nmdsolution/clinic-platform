@@ -101,7 +101,6 @@ const AjoutMedicament: React.FC<Props> = ({ open, onClose, onCreated }) => {
       if (suivreStock) {
         await postRest('stockmanagement/stockitem', {
           drugUuid: drug.uuid,
-          isDrug: true,
           hasExpiration: true,
           commonName: nomFinal,
         });

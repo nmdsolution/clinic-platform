@@ -56,7 +56,6 @@ const FicheMedicament: React.FC = () => {
     try {
       await postRest('stockmanagement/stockitem', {
         drugUuid: uuid,
-        isDrug: true,
         hasExpiration: true,
         commonName: text(d.nom),
       });
