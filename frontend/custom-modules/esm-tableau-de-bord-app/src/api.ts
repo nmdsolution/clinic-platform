@@ -15,6 +15,7 @@ export const DATASETS = {
   tarifs: '0f7a0000-c1c0-4000-8000-00000000b010',
   impayes: '0f7a0000-c1c0-4000-8000-00000000b011',
   ventesParActe: '0f7a0000-c1c0-4000-8000-00000000b012',
+  formes: '0f7a0000-c1c0-4000-8000-00000000b013',
 };
 
 export type Row = Record<string, string | number | null>;
@@ -54,7 +55,22 @@ export function useDataSet(uuid: string, params?: Record<string, string>) {
   return { rows, loading, error, reload };
 }
 
-function errorMessage(err: unknown): string {
+/** Envoie un objet JSON à l'API REST et renvoie la réponse (POST) */
+export async function postRest<T = { uuid: string }>(path: string, body: unknown): Promise<T> {
+  const response = await openmrsFetch<T>(`/ws/rest/v1/${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return response.data;
+}
+
+export async function getRest<T>(path: string): Promise<T> {
+  const response = await openmrsFetch<T>(`/ws/rest/v1/${path}`);
+  return response.data;
+}
+
+export function errorMessage(err: unknown): string {
   // openmrsFetch rejette avec { response, responseBody } quand le serveur répond en erreur
   const e = err as { response?: { status?: number }; responseBody?: { error?: { message?: string } } };
   if (e?.response?.status === 401 || e?.response?.status === 403) {

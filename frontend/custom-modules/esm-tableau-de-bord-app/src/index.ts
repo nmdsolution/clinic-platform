@@ -22,3 +22,6 @@ export const root = getAsyncLifecycle(() => import('./root.component'), options)
 
 /** Lien dans le menu des applications (app-menu-slot) */
 export const menuLink = getAsyncLifecycle(() => import('./menu-link.component'), options);
+
+/** Barre des modules dans l'en-tête (top-nav-info-slot), à la manière de Dolibarr */
+export const barreModules = getAsyncLifecycle(() => import('./barre-modules/barre-modules.component'), options);

@@ -875,5 +875,45 @@ ORDER BY montant DESC</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
 WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b012';
 
+-- Tableau de bord - Formes galéniques
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Formes galéniques', 'Formes proposées à la création d''un médicament', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b013" retired="false">
+  <name>Tableau de bord - Formes galéniques</name>
+  <description>Formes proposées à la création d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT c.uuid AS uuid,
+       (SELECT cn.name FROM concept_name cn
+         WHERE cn.concept_id = c.concept_id AND cn.voided = 0 AND cn.locale_preferred = 1
+         ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS forme
+FROM concept c
+WHERE c.retired = 0
+  AND (c.class_id = (SELECT concept_class_id FROM concept_class WHERE name = &apos;Drug form&apos;)
+       OR c.concept_id IN (SELECT DISTINCT dosage_form FROM drug WHERE dosage_form IS NOT NULL))
+ORDER BY forme</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b013'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b013');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b013" retired="false">
+  <name>Tableau de bord - Formes galéniques</name>
+  <description>Formes proposées à la création d''un médicament</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-11 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT c.uuid AS uuid,
+       (SELECT cn.name FROM concept_name cn
+         WHERE cn.concept_id = c.concept_id AND cn.voided = 0 AND cn.locale_preferred = 1
+         ORDER BY cn.locale = &apos;fr&apos; DESC, cn.locale = &apos;en&apos; DESC LIMIT 1) AS forme
+FROM concept c
+WHERE c.retired = 0
+  AND (c.class_id = (SELECT concept_class_id FROM concept_class WHERE name = &apos;Drug form&apos;)
+       OR c.concept_id IN (SELECT DISTINCT dosage_form FROM drug WHERE dosage_form IS NOT NULL))
+ORDER BY forme</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b013';
+
 SELECT serialized_object_id AS id, name, uuid FROM serialized_object
 WHERE uuid LIKE '0f7a0000-c1c0-4000-8000-00000000b%' ORDER BY uuid;

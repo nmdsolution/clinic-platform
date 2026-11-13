@@ -1,0 +1,56 @@
+// Barre posée dans l'en-tête vert (#005d5d) d'OpenMRS, hauteur 3rem
+.barre {
+  display: flex;
+  align-items: stretch;
+  height: 3rem;
+  margin-left: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.module {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 4.5rem;
+  padding: 0 0.5rem;
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+
+  &:hover,
+  &:focus {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.18);
+  border-bottom-color: #ffffff;
+}
+
+.label {
+  font-size: 0.7rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// Petit écran : icônes seules (le libellé reste en info-bulle)
+@media (max-width: 1056px) {
+  .module {
+    min-width: 2.75rem;
+  }
+
+  .label {
+    display: none;
+  }
+}

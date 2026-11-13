@@ -15,7 +15,10 @@ const ONGLETS = ['parcours', 'patients', 'consultations', 'recettes', 'impayes',
 
 const Root: React.FC = () => {
   const { t } = useTranslation();
-  const [index, setIndex] = useState(0);
+  // ?onglet=medicaments ouvre directement l'onglet (liens de la barre des modules)
+  const [index, setIndex] = useState(() =>
+    Math.max(0, ONGLETS.indexOf(new URLSearchParams(window.location.search).get('onglet') ?? '')),
+  );
   const openTab = (onglet: string) => setIndex(Math.max(0, ONGLETS.indexOf(onglet)));
 
   return (

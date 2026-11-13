@@ -16,6 +16,13 @@
       "slot": "app-menu-slot",
       "online": true,
       "offline": false
+    },
+    {
+      "name": "barre-modules",
+      "component": "barreModules",
+      "slot": "top-nav-info-slot",
+      "online": true,
+      "offline": false
     }
   ]
 }

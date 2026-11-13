@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Search, Tag } from '@carbon/react';
+import { Button, Checkbox, InlineNotification, Search, Tag } from '@carbon/react';
+import { Add } from '@carbon/react/icons';
 import { DATASETS, num, text, useDataSet } from '../api';
 import DataTable, { type Column } from '../data-table.component';
+import AjoutMedicament from './ajout-medicament.component';
 import styles from '../root.scss';
 
 const ETATS: Record<string, 'green' | 'red' | 'gray'> = {
@@ -16,7 +18,9 @@ const qte = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
 /** Médicaments prescriptibles et leur stock : remplace la lecture de l'écran d'administration */
 const MedicamentsTab: React.FC = () => {
   const { t } = useTranslation();
-  const { rows, loading, error } = useDataSet(DATASETS.medicaments);
+  const { rows, loading, error, reload } = useDataSet(DATASETS.medicaments);
+  const [ajoutOuvert, setAjoutOuvert] = useState(false);
+  const [cree, setCree] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [suivisSeulement, setSuivisSeulement] = useState(false);
 
@@ -47,7 +51,19 @@ const MedicamentsTab: React.FC = () => {
 
   return (
     <>
+      {cree && (
+        <InlineNotification
+          kind="success"
+          title={t('medicamentCree', 'Médicament ajouté :')}
+          subtitle={cree}
+          lowContrast
+          onClose={() => setCree(null)}
+        />
+      )}
       <div className={styles.toolbar}>
+        <Button renderIcon={Add} size="lg" onClick={() => setAjoutOuvert(true)}>
+          {t('ajouterMedicament', 'Ajouter un médicament')}
+        </Button>
         <Search
           size="lg"
           labelText={t('rechercher', 'Rechercher')}
@@ -74,8 +90,18 @@ const MedicamentsTab: React.FC = () => {
         error={error}
         emptyText={t('aucunMedicament', 'Aucun médicament ne correspond à la recherche.')}
       />
+      <AjoutMedicament
+        open={ajoutOuvert}
+        onClose={() => setAjoutOuvert(false)}
+        onCreated={(nom) => {
+          setAjoutOuvert(false);
+          setCree(nom);
+          setQuery(nom);
+          reload();
+        }}
+      />
       <p className={styles.note}>
-        {t('ajouterMedicament', 'Pour ajouter ou corriger un médicament (administrateur) :')}{' '}
+        {t('corrigerMedicament', 'Pour corriger ou retirer un médicament (administrateur) :')}{' '}
         <a href="/openmrs/admin/concepts/conceptDrug.list">{t('gererMedicaments', 'gérer le dictionnaire des médicaments')}</a>
       </p>
     </>
