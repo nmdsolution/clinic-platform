@@ -91,8 +91,12 @@ const AssistantBouton: React.FC = () => {
         await chiffresDuJour(),
       ].join('\n');
 
+      // Sans réponse en 60 s, on abandonne avec un message clair (connexion lente, service saturé)
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 60_000);
       const response = await fetch('/assistant-api/generate', {
         method: 'POST',
+        signal: controller.signal,
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,12 +106,15 @@ const AssistantBouton: React.FC = () => {
           generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
         }),
       });
+      window.clearTimeout(timer);
       const data: GeminiResponse = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(
           response.status === 401
             ? 'Session expirée : reconnectez-vous.'
-            : response.status === 429
+            : response.status === 503 || response.status === 504
+              ? 'Le service d’IA est saturé ou trop lent. Réessayez dans un instant.'
+              : response.status === 429
               ? 'Trop de questions en peu de temps (limite de l’offre gratuite). Réessayez dans une minute.'
               : data.error?.message
                 ? `Assistant indisponible : ${data.error.message}`
@@ -117,7 +124,13 @@ const AssistantBouton: React.FC = () => {
       const reponse = (data.candidates?.[0]?.content?.parts ?? []).map((p) => text(p.text ?? '')).join('').trim();
       setMessages([...historique, { role: 'model', text: reponse || 'Je n’ai pas de réponse. Reformulez la question.' }]);
     } catch (err) {
-      setErreur(err instanceof Error ? err.message : 'Assistant indisponible pour le moment.');
+      setErreur(
+        err instanceof DOMException && err.name === 'AbortError'
+          ? 'Pas de réponse après 60 secondes. Vérifiez la connexion et réessayez.'
+          : err instanceof Error
+            ? err.message
+            : 'Assistant indisponible pour le moment.',
+      );
     } finally {
       setEnvoi(false);
     }

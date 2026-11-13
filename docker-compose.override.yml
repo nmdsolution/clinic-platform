@@ -7,7 +7,7 @@ services:
     environment:
       # Assistant IA : à renseigner dans le .env du serveur (pas dans le dépôt)
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-latest}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
 
   frontend:
     build:

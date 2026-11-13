@@ -118,7 +118,7 @@ server {
     proxy_set_header Authorization "";
     proxy_set_header x-goog-api-key "${GEMINI_API_KEY}";
     proxy_ssl_server_name on;
-    proxy_read_timeout 120s;
+    proxy_read_timeout 60s;
     set $gemini https://generativelanguage.googleapis.com;
     proxy_pass $gemini/v1beta/models/${GEMINI_MODEL}:generateContent;
   }
