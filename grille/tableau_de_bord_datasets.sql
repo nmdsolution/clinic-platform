@@ -1129,5 +1129,81 @@ ORDER BY t.date_created DESC, t.stock_item_transaction_id DESC</sqlQuery>
 </org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
 WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b016';
 
+-- Tableau de bord - Visites ouvertes (Phase 0 lot 3 : régularisation des visites)
+INSERT INTO serialized_object (name, description, type, subtype, serialization_class,
+                               serialized_data, date_created, creator, retired, uuid)
+SELECT 'Tableau de bord - Visites ouvertes', 'Visites non clôturées, avec durée et impayés du patient', type, subtype, serialization_class, '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b017" retired="false">
+  <name>Tableau de bord - Visites ouvertes</name>
+  <description>Visites non clôturées, avec durée et impayés du patient</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-25 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT p.uuid AS uuid,
+       v.uuid AS visite_uuid,
+       vt.name AS type_visite,
+       DATE_FORMAT(v.date_started, &apos;%Y-%m-%d %H:%i&apos;) AS debut,
+       TIMESTAMPDIFF(HOUR, v.date_started, NOW()) AS heures,
+       pi.identifier AS dossier,
+       CONCAT(pn.family_name, &apos; &apos;, pn.given_name) AS patient,
+       l.name AS lieu,
+       GREATEST((SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li
+                   JOIN cashier_bill b ON b.bill_id = li.bill_id
+                  WHERE b.patient_id = v.patient_id AND b.voided = 0 AND li.voided = 0)
+              - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp
+                   JOIN cashier_bill b ON b.bill_id = bp.bill_id
+                  WHERE b.patient_id = v.patient_id AND b.voided = 0 AND bp.voided = 0), 0) AS impaye
+FROM visit v
+JOIN visit_type vt ON vt.visit_type_id = v.visit_type_id
+JOIN person p ON p.person_id = v.patient_id
+LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
+LEFT JOIN patient_identifier pi ON pi.patient_id = v.patient_id AND pi.preferred = 1 AND pi.voided = 0
+LEFT JOIN location l ON l.location_id = v.location_id
+WHERE v.date_stopped IS NULL
+  AND v.voided = 0
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+ORDER BY v.date_started</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', NOW(), creator, 0, '0f7a0000-c1c0-4000-8000-00000000b017'
+FROM serialized_object
+WHERE serialized_object_id = 12
+  AND NOT EXISTS (SELECT 1 FROM serialized_object WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b017');
+UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition id="1" uuid="0f7a0000-c1c0-4000-8000-00000000b017" retired="false">
+  <name>Tableau de bord - Visites ouvertes</name>
+  <description>Visites non clôturées, avec durée et impayés du patient</description>
+  <creator id="2" uuid="82f18b44-6814-11e8-923f-e9a88dcb533f"/>
+  <dateCreated id="3">2026-11-25 15:00:00 UTC</dateCreated>
+  <parameters id="5"/>
+  <sqlQuery>SELECT p.uuid AS uuid,
+       v.uuid AS visite_uuid,
+       vt.name AS type_visite,
+       DATE_FORMAT(v.date_started, &apos;%Y-%m-%d %H:%i&apos;) AS debut,
+       TIMESTAMPDIFF(HOUR, v.date_started, NOW()) AS heures,
+       pi.identifier AS dossier,
+       CONCAT(pn.family_name, &apos; &apos;, pn.given_name) AS patient,
+       l.name AS lieu,
+       GREATEST((SELECT COALESCE(SUM(li.price * li.quantity), 0) FROM cashier_bill_line_item li
+                   JOIN cashier_bill b ON b.bill_id = li.bill_id
+                  WHERE b.patient_id = v.patient_id AND b.voided = 0 AND li.voided = 0)
+              - (SELECT COALESCE(SUM(bp.amount), 0) FROM cashier_bill_payment bp
+                   JOIN cashier_bill b ON b.bill_id = bp.bill_id
+                  WHERE b.patient_id = v.patient_id AND b.voided = 0 AND bp.voided = 0), 0) AS impaye
+FROM visit v
+JOIN visit_type vt ON vt.visit_type_id = v.visit_type_id
+JOIN person p ON p.person_id = v.patient_id
+LEFT JOIN person_name pn ON pn.person_id = p.person_id AND pn.preferred = 1 AND pn.voided = 0
+LEFT JOIN patient_identifier pi ON pi.patient_id = v.patient_id AND pi.preferred = 1 AND pi.voided = 0
+LEFT JOIN location l ON l.location_id = v.location_id
+WHERE v.date_stopped IS NULL
+  AND v.voided = 0
+  AND NOT EXISTS (SELECT 1 FROM person_attribute dm
+                  JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
+                  WHERE dm.person_id = v.patient_id AND dm.voided = 0
+                    AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)
+ORDER BY v.date_started</sqlQuery>
+</org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition>', date_changed = NOW()
+WHERE uuid = '0f7a0000-c1c0-4000-8000-00000000b017';
+
 SELECT serialized_object_id AS id, name, uuid FROM serialized_object
 WHERE uuid LIKE '0f7a0000-c1c0-4000-8000-00000000b%' ORDER BY uuid;

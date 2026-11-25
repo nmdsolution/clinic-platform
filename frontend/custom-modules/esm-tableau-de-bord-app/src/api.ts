@@ -19,6 +19,7 @@ export const DATASETS = {
   ficheInfo: '0f7a0000-c1c0-4000-8000-00000000b014',
   ficheStock: '0f7a0000-c1c0-4000-8000-00000000b015',
   ficheHistorique: '0f7a0000-c1c0-4000-8000-00000000b016',
+  visitesOuvertes: '0f7a0000-c1c0-4000-8000-00000000b017',
 };
 
 export type Row = Record<string, string | number | null>;
