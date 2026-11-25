@@ -52,7 +52,7 @@ UPDATE program SET name = 'PTME (prévention de la transmission mère-enfant)'
  WHERE uuid = 'd1b6cd43-8ac7-4cdd-8fb4-fe51635c82b4' AND name = 'PMTCT';
 UPDATE program SET name = 'Prévention du VIH (PEP/PrEP)'
  WHERE uuid = 'ac1bbc45-8c35-49ff-a574-9553ff789527' AND name = 'HIV Preventative Services (PEP/PrEP)';
-UPDATE program SET name = 'Éducation thérapeutique du diabète (consultation externe)'
+UPDATE program SET name = 'Éducation au diabète (externe)'
  WHERE uuid = '7a72a724-8994-4d33-962e-f65d8ca4ae67' AND name = 'Outpatient Diabetes Education Program';
 
 -- Lieu technique
