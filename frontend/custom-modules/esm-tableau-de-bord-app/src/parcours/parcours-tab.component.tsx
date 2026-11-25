@@ -71,8 +71,8 @@ const ParcoursTab: React.FC = () => {
     {
       titre: 'Pharmacie',
       qui: 'Pharmacien',
-      // Ne pas promettre de décompte automatique tant que la dispensation n'est pas reliée au stock (Phase 1)
-      quoi: "Après paiement de l'ordonnance : délivrer les médicaments, puis enregistrer la sortie dans Médicaments › Stock (le stock n'est pas encore décompté automatiquement).",
+      // Dispensation reliée au stock (enableStockDispense) : seule la Pharmacie principale est déduite
+      quoi: "Après paiement de l'ordonnance : délivrer les médicaments en choisissant le lot ; le stock de la Pharmacie principale est déduit. Une remise hors logiciel se corrige dans Médicaments › Ajuster le stock.",
       action: 'Ouvrir la dispensation',
       to: 'dispensing',
     },

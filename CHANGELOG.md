@@ -30,6 +30,10 @@
     Les autres liens (inscription, facturation, files d'attente, laboratoire, dispensation, impayés) ont été vérifiés
     contre `routes.registry.json` de production.
   - Assistant IA : base de connaissances alignée (stock non décompté, clôture automatique des visites).
+- Pharmacie reliée au stock (`esm-tableau-de-bord-app` 1.5.8) : `enableStockDispense: true` pour `esm-dispensing-app`
+  dans `config-core_demo.json`. À la délivrance, le pharmacien choisit le lot et le stock de la Pharmacie principale
+  est déduit (`stockmanagement/dispenserequest`). Vérifié : l'inventaire est trouvé depuis le lieu de connexion
+  « Fondation Médicale Fasse ». Textes du parcours et de l'assistant mis à jour en conséquence.
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.
