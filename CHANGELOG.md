@@ -22,6 +22,14 @@
   - `esm-tableau-de-bord-app` 1.5.6 : onglet **Patients › Visites ouvertes** (dataset `…b017`) avec durée,
     impayés du patient et bouton « Clôturer » ; les hospitalisations se clôturent à la sortie depuis le dossier.
   - Les fichiers `*.test.ts(x)` sont exclus du `tsconfig` du module en attendant l'installation de Jest (lot 6).
+- Lot 4 (facturation d'un patient inconnu) : reporté à la demande du client.
+- Lot 5 — Tableau de bord (`esm-tableau-de-bord-app` 1.5.7) :
+  - Étape Pharmacie : ne dit plus que « le stock diminue automatiquement » (la dispensation n'est pas reliée au stock,
+    0 dispensation enregistrée) ; indique d'enregistrer la sortie dans Médicaments.
+  - Étape Consultation : « Voir les patients présents » ouvre Patients › Visites ouvertes au lieu de l'accueil générique.
+    Les autres liens (inscription, facturation, files d'attente, laboratoire, dispensation, impayés) ont été vérifiés
+    contre `routes.registry.json` de production.
+  - Assistant IA : base de connaissances alignée (stock non décompté, clôture automatique des visites).
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.

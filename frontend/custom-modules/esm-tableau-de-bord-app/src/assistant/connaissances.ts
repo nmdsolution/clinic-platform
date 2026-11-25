@@ -28,17 +28,17 @@ PARCOURS DU PATIENT À FASSE
 3. Paramètres et attente (infirmier) : dans le dossier, saisir les signes vitaux (tension, température, poids, taille) puis placer le patient dans la file d'attente du service (Accueil > Files d'attente).
 4. Consultation (médecin) : ouvrir le dossier depuis la file d'attente, saisir la note de consultation (formulaires), le diagnostic, prescrire examens et médicaments (panier de commandes), signer.
 5. Laboratoire : les examens se paient à la caisse avant le prélèvement. Accueil > Laboratoire : prendre la demande, prélever, saisir et valider les résultats ; le médecin les voit dans le dossier.
-6. Pharmacie : l'ordonnance se paie, puis le module Pharmacie (dispensation) délivre les médicaments ; le stock diminue.
-7. Sortie : vérifier que tout est payé (module Ventes > Impayés), puis terminer la visite dans le dossier (« Terminer la visite »). Une visite non terminée reste ouverte et fausse les chiffres.
+6. Pharmacie : l'ordonnance se paie, puis le module Pharmacie (dispensation) délivre les médicaments. Le stock n'est PAS encore décompté automatiquement à la délivrance : enregistrer la sortie avec « Ajuster le stock » sur la fiche du médicament (Médicaments).
+7. Sortie : vérifier que tout est payé (module Ventes > Impayés), puis terminer la visite dans le dossier (« Terminer la visite »). Les consultations encore ouvertes sont clôturées automatiquement chaque soir à 23 h 59 ; les hospitalisations restent ouvertes jusqu'à la sortie. La liste des visites ouvertes est dans Patients > Visites ouvertes.
 
 PROBLÈMES CONNUS ET SOLUTIONS
 - Un écran ne montre pas les dernières modifications : recharger avec Ctrl+F5.
 - « Votre compte n'a pas le droit… (Run Reports) » ou un écran vide pour un utilisateur : il manque un rôle ou un privilège ; l'administrateur doit l'ajouter (Administration système > Utilisateurs).
 - Ajustement de stock refusé : seul le compte administrateur a pour l'instant le droit de faire des opérations de stock, et seulement sur la Pharmacie principale et le Magasin principal.
 - Un médicament n'a pas de prix de vente : les prix des médicaments ne sont pas encore saisis, ils ne peuvent pas être facturés comme une vente ; seuls les actes et examens ont un tarif.
-- Le stock ne baisse pas quand on donne un médicament : la dispensation doit passer par le module Pharmacie ; une remise sans le logiciel ne change pas le stock. Corriger avec « Ajuster le stock » sur la fiche du médicament.
+- Le stock ne baisse pas quand on donne un médicament : c'est normal pour l'instant, la délivrance n'est pas encore reliée au stock. Enregistrer chaque sortie avec « Ajuster le stock » sur la fiche du médicament.
 - « Specify a drug or concept » dans le module Stock : l'article n'est relié à aucun médicament ; créer les médicaments depuis Médicaments > « Ajouter un médicament », qui crée tout en une fois.
-- Beaucoup de visites restent ouvertes : penser à « Terminer la visite » à la sortie du patient.
+- Beaucoup de visites restent ouvertes : penser à « Terminer la visite » à la sortie du patient ; sinon elles sont clôturées le soir, et on peut les clôturer depuis Patients > Visites ouvertes.
 - Mot de passe oublié : l'administrateur le réinitialise ; ensuite changer son mot de passe depuis l'icône profil.
 - Patient en double : ne pas créer de nouveau dossier, prévenir l'administrateur pour fusionner.`;
 

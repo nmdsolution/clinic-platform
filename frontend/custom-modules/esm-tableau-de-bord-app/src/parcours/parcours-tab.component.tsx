@@ -57,7 +57,7 @@ const ParcoursTab: React.FC = () => {
       qui: 'Médecin',
       quoi: 'Ouvrir le dossier, saisir la consultation, prescrire les examens et les médicaments.',
       action: 'Voir les patients présents',
-      to: 'home',
+      to: 'patients/visites-ouvertes',
       chiffre: `${n('visites_ouvertes')} visite(s) non clôturée(s)`,
     },
     {
@@ -71,7 +71,8 @@ const ParcoursTab: React.FC = () => {
     {
       titre: 'Pharmacie',
       qui: 'Pharmacien',
-      quoi: "Après paiement de l'ordonnance : délivrer les médicaments. Le stock diminue automatiquement.",
+      // Ne pas promettre de décompte automatique tant que la dispensation n'est pas reliée au stock (Phase 1)
+      quoi: "Après paiement de l'ordonnance : délivrer les médicaments, puis enregistrer la sortie dans Médicaments › Stock (le stock n'est pas encore décompté automatiquement).",
       action: 'Ouvrir la dispensation',
       to: 'dispensing',
     },
