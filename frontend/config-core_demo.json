@@ -4,24 +4,38 @@
     "showUpcomingAppointments": true,
     "extensionSlots": {
       "action-menu-patient-chart-items-slot": {
-        "order": ["order-basket-action-menu"]
+        "order": [
+          "order-basket-action-menu"
+        ]
       }
     }
   },
   "@openmrs/esm-ward-app": {
     "extensionSlots": {
       "action-menu-ward-patient-items-slot": {
-        "add": ["order-basket-action-menu"]
+        "add": [
+          "order-basket-action-menu"
+        ]
       }
     }
   },
   "@openmrs/esm-patient-tests-app": {
     "orders": {
-      "labOrderableConcepts": ["81d547fb-f646-5ccf-9f62-01d502fa4084"]
+      "labOrderableConcepts": [
+        "81d547fb-f646-5ccf-9f62-01d502fa4084"
+      ]
     }
   },
   "@openmrs/esm-laboratory-app": {
-    "labTableColumns": ["name", "patientId", "urgency", "age", "sex", "totalOrders", "action"]
+    "labTableColumns": [
+      "name",
+      "patientId",
+      "urgency",
+      "age",
+      "sex",
+      "totalOrders",
+      "action"
+    ]
   },
   "@openmrs/esm-billing-app": {
     "defaultCurrency": "XAF",
@@ -41,8 +55,73 @@
     },
     "extensionSlots": {
       "app-menu-slot": {
-        "remove": ["caisse-menu-link"]
+        "remove": [
+          "caisse-menu-link"
+        ]
       }
     }
+  },
+  "@openmrs/esm-patient-registration-app": {
+    "sections": [
+      "demographics",
+      "contact",
+      "complementaire",
+      "prevenir",
+      "relationships"
+    ],
+    "sectionDefinitions": [
+      {
+        "id": "complementaire",
+        "name": "Informations complémentaires",
+        "fields": [
+          "profession"
+        ]
+      },
+      {
+        "id": "prevenir",
+        "name": "Personne à prévenir",
+        "fields": [
+          "prevenirNom",
+          "prevenirTelephone",
+          "prevenirLien"
+        ]
+      }
+    ],
+    "fieldDefinitions": [
+      {
+        "id": "profession",
+        "type": "person attribute",
+        "label": "Profession",
+        "uuid": "0f7a0000-c1c0-4000-8000-0000000000a1",
+        "uiComponent": "input",
+        "placeholder": "Ex. : commerçant, enseignante, élève"
+      },
+      {
+        "id": "prevenirNom",
+        "type": "person attribute",
+        "label": "Nom de la personne à prévenir",
+        "uuid": "0f7a0000-c1c0-4000-8000-0000000000a2",
+        "uiComponent": "input"
+      },
+      {
+        "id": "prevenirTelephone",
+        "type": "person attribute",
+        "label": "Téléphone de la personne à prévenir",
+        "uuid": "0f7a0000-c1c0-4000-8000-0000000000a3",
+        "uiComponent": "input",
+        "placeholder": "+237 6XX XX XX XX",
+        "validation": {
+          "matches": "^\\+?[0-9 ]{8,16}$"
+        }
+      },
+      {
+        "id": "prevenirLien",
+        "type": "person attribute",
+        "label": "Lien avec le patient",
+        "uuid": "0f7a0000-c1c0-4000-8000-0000000000a4",
+        "uiComponent": "input",
+        "placeholder": "Ex. : époux, mère, frère, ami"
+      }
+    ]
   }
 }
