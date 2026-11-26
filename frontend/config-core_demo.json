@@ -1,6 +1,7 @@
 {
   "@openmrs/esm-dispensing-app": {
-    "enableStockDispense": true
+    "enableStockDispense": true,
+    "validateBatch": false
   },
   "@openmrs/esm-patient-chart-app": {
     "restrictByVisitLocationTag": true,

@@ -34,6 +34,17 @@
   dans `config-core_demo.json`. À la délivrance, le pharmacien choisit le lot et le stock de la Pharmacie principale
   est déduit (`stockmanagement/dispenserequest`). Vérifié : l'inventaire est trouvé depuis le lieu de connexion
   « Fondation Médicale Fasse ». Textes du parcours et de l'assistant mis à jour en conséquence.
+- Médicaments : unités, stock et prix (`grille/medicaments_unites_prix.sql`, appliqué le 26/11/2026 après sauvegarde) :
+  - Chaque médicament relié au stock a une vraie forme du jeu des unités de dosage (Comprimé, Ampoule, Fiole, Flacon,
+    Poche, Sachet, Ovule). Ceftriaxone avait « Intraveineuse » (une voie) : le serveur refusait l'ordonnance
+    (`DrugOrder.error.notAmongAllowedConcepts`). Flacon, Poche, Sachet et le nouveau concept Ovule sont ajoutés au jeu.
+  - Trois articles de stock étaient reliés au mauvais médicament (Oméprazole inj, Érythromycine cp, Nystatine ovule) :
+    nouveaux médicaments créés et reliés.
+  - L'unité de stock « Piece » est remplacée par la forme du médicament (facteur 1, quantités inchangées).
+  - Prix de vente sur les 47 articles de stock (repris des services de même nom) : une ordonnance crée maintenant une
+    ligne au bon prix au lieu de 0 FCFA.
+  - `validateBatch: false` pour `esm-dispensing-app` : 47 lots sur 49 n'ont pas de date de péremption, ils étaient
+    tous écartés à la délivrance. À réactiver quand la pharmacie aura saisi les vraies dates.
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.
