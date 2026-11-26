@@ -48,7 +48,7 @@ RUN node -e " \
   const importmap = JSON.parse(fs.readFileSync('importmap.json', 'utf8')); \
   importmap.imports['@face/esm-caisse-app'] = './openmrs-esm-caisse-app-1.0.0/openmrs-esm-caisse-app.js'; \
   importmap.imports['@openmrs/esm-login-app'] = './openmrs-esm-login-app-custom-1.0.0/openmrs-esm-login-app.js'; \
-  importmap.imports['@face/esm-tableau-de-bord-app'] = './openmrs-esm-tableau-de-bord-app-1.5.8/openmrs-esm-tableau-de-bord-app.js'; \
+  importmap.imports['@face/esm-tableau-de-bord-app'] = './openmrs-esm-tableau-de-bord-app-1.5.9/openmrs-esm-tableau-de-bord-app.js'; \
   fs.writeFileSync('importmap.json', JSON.stringify(importmap)); \
   const registry = JSON.parse(fs.readFileSync('routes.registry.json', 'utf8')); \
   const caisseRoutes = JSON.parse(fs.readFileSync('caisse-routes.json', 'utf8')); \
@@ -58,15 +58,30 @@ RUN node -e " \
   registry['@face/esm-tableau-de-bord-app'] = JSON.parse(fs.readFileSync('tableau-routes.json', 'utf8')); \
   fs.writeFileSync('routes.registry.json', JSON.stringify(registry)); \
   "
+# Traductions françaises (frontend/traductions-fr.json) injectées dans la configuration
+# comme « Translation overrides » de chaque module : c'est le mécanisme officiel d'O3,
+# appliqué par le framework lui-même au chargement de chaque module.
+COPY frontend/config-core_demo.json frontend/traductions-fr.json ./
+RUN node -e " \
+  const fs = require('fs'); \
+  const config = JSON.parse(fs.readFileSync('config-core_demo.json', 'utf8')); \
+  const fr = JSON.parse(fs.readFileSync('traductions-fr.json', 'utf8')); \
+  for (const [module, textes] of Object.entries(fr)) { \
+    const c = config[module] = config[module] || {}; \
+    const o = c['Translation overrides'] = c['Translation overrides'] || {}; \
+    o.fr = Object.assign({}, o.fr, textes); \
+  } \
+  fs.writeFileSync('config-core_demo.json', JSON.stringify(config, null, 2)); \
+  "
 
 FROM openmrs/openmrs-reference-application-3-frontend:${BASE_FRONTEND_TAG}
 COPY --from=build-caisse /app/dist /usr/share/nginx/html/openmrs-esm-caisse-app-1.0.0/
 COPY --from=build-login /app/dist /usr/share/nginx/html/openmrs-esm-login-app-custom-1.0.0/
-COPY --from=build-tableau /app/dist /usr/share/nginx/html/openmrs-esm-tableau-de-bord-app-1.5.8/
+COPY --from=build-tableau /app/dist /usr/share/nginx/html/openmrs-esm-tableau-de-bord-app-1.5.9/
 COPY --from=merge /merge/importmap.json /usr/share/nginx/html/importmap.json
 COPY --from=merge /merge/routes.registry.json /usr/share/nginx/html/routes.registry.json
 # Remplace le config-core_demo.json de stock par notre version (mêmes clés de
 # base + couleur de marque et logo Clinique FACE) : le nom de fichier reste
 # identique à celui déjà référencé par SPA_CONFIG_URLS, donc rien d'autre à
 # changer côté docker-compose.
-COPY frontend/config-core_demo.json /usr/share/nginx/html/config-core_demo.json
+COPY --from=merge /merge/config-core_demo.json /usr/share/nginx/html/config-core_demo.json

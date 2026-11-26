@@ -3,6 +3,12 @@
     "enableStockDispense": true,
     "validateBatch": false
   },
+  "@openmrs/esm-patient-medications-app": {
+    "daysDurationUnit": {
+      "uuid": "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "Jours"
+    }
+  },
   "@openmrs/esm-patient-chart-app": {
     "restrictByVisitLocationTag": true,
     "showUpcomingAppointments": true,

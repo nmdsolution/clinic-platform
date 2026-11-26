@@ -45,6 +45,18 @@
     ligne au bon prix au lieu de 0 FCFA.
   - `validateBatch: false` pour `esm-dispensing-app` : 47 lots sur 49 n'ont pas de date de péremption, ils étaient
     tous écartés à la délivrance. À réactiver quand la pharmacie aura saisi les vraies dates.
+- Tarifs à l'ouverture de visite (`grille/tarifs_consultation_modes.sql`, appliqué le 26/11/2026 après sauvegarde) :
+  le formulaire de visite n'affiche que les services ayant un prix lié au mode de paiement choisi. Les actes de
+  consultation (services 5 à 19 et 112) ont maintenant un prix Espèces, Orange Money et MTN Mobile Money (même montant) ;
+  « Cash » renommé « Espèces », prix PayPal retiré. Attributs de visite et types de commande renommés en français.
+- Traductions (`esm-tableau-de-bord-app` 1.5.9) : les ~570 textes français des modules officiels passent de
+  `surcharges-fr.ts` (jamais appliqués : l'événement i18next « added » ne se déclenche pas) à
+  `frontend/traductions-fr.json`, fusionné dans `config-core_demo.json` comme « Translation overrides » à la
+  construction de l'image. Ajouts : statuts de facture (PAID, POSTED, PENDING), Finaliser la facture, Demander une remise,
+  N° de facture, Traitements à venir, Retour à l'ordonnance, Calculée automatiquement, Homme/Femme ;
+  unité de durée « Jours » (`daysDurationUnit`).
+- Page facture (`styles-globaux.ts`) : la barre d'actions et le bloc des totaux/paiement passent à la ligne au lieu
+  d'être coupés sur un écran étroit (1071 px).
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.

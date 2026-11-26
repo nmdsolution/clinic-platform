@@ -4,7 +4,7 @@
  * évalués par l'API reportingrest d'OpenMRS.
  */
 import { getAsyncLifecycle } from '@openmrs/esm-framework';
-import { appliquerSurchargesFr } from './traductions/surcharges-fr';
+import { injecterStylesGlobaux } from './styles-globaux';
 
 const moduleName = '@face/esm-tableau-de-bord-app';
 
@@ -16,9 +16,13 @@ const options = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const importTranslation = (require as any).context('../translations', false, /.json$/, 'lazy');
 
-/** Complète en français les textes manquants des modules officiels (voir traductions/surcharges-fr.ts) */
+/**
+ * Corrections d'affichage des modules officiels (voir styles-globaux.ts).
+ * Les traductions françaises des modules officiels ne sont plus appliquées ici : elles sont dans
+ * frontend/traductions-fr.json, injectées dans la configuration comme « Translation overrides ».
+ */
 export function startupApp() {
-  appliquerSurchargesFr();
+  injecterStylesGlobaux();
 }
 
 /** Tableau de bord : /openmrs/spa/tableau-de-bord */
