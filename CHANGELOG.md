@@ -74,7 +74,11 @@
   périmé, Produit endommagé, Perte ou vol, Écart d'inventaire.
 
 - Module serveur `hgest` 1.0.0 (`backend/modules/hgest`, compilé par `build.sh` contre les bibliothèques de la
-  distribution, ajouté dans `backend/Dockerfile`) — **testé sur une copie locale, pas encore déployé** :
+  distribution, ajouté dans `backend/Dockerfile`) — testé sur une copie locale, **déployé le 27/11/2026 à 16:34 UTC**
+  après sauvegarde `openmrs_avant_module_hgest_20261127_1629`. En production, l'image backend n'a pas été
+  reconstruite par Maven (la distribution aurait été retéléchargée) : image en service + `hgest-1.0.0.omod`.
+  Images de retour arrière : `clinic-platform-backend:avant-hgest-20261127_1629` et
+  `clinic-platform-frontend:avant-hgest-20261127_1629` :
   - Une facture par visite (point 5) : une ordonnance ou un examen s'ajoute à la facture **en attente** de la visite
     (en général celle de la consultation) au lieu de créer une facture chacun. Une facture finalisée ou payée ne
     reçoit plus de lignes : l'acte suivant ouvre une nouvelle facture de la visite. Prix, caisse et annulation des
