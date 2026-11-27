@@ -58,6 +58,17 @@
   unité de durée « Jours » (`daysDurationUnit`).
 - Page facture (`styles-globaux.ts`) : la barre d'actions et le bloc des totaux/paiement passent à la ligne au lieu
   d'être coupés sur un écran étroit (1071 px).
+- Pagination REST et PayPal (`grille/pagination_paypal.sql`, appliqué le 27/11/2026 après sauvegarde) :
+  `webservices.rest.maxResultsDefault` et `maxResultsAbsolute` passent à 200 (réenregistrés par l'API pour vider le
+  cache). Le formulaire de visite ne lit qu'une page de services : avec 116 services, la consultation
+  ophtalmologique n'apparaissait pas. Mode de paiement PayPal retiré.
+- Nettoyage du test du 26/11/2026 (patient TEST HGEST, 1000ECT), appliqué le 27/11/2026 après sauvegarde
+  `avant_nettoyage_test_20261127_1005` : factures 0021-6 à 0024-0, leurs lignes et le paiement de 2 000 FCFA
+  annulés (`grille/nettoyage_test_hgest.sql`) ; ordonnances, délivrance, consultations, visite et patient annulés
+  par l'API. Rien n'est supprimé. Les rapports de facturation et le tableau de bord ignorent les données annulées.
+  **Reste à faire :** remettre en stock les 3 Fioles de Ceftriaxone (lot INIT-2026-09). L'ajustement est impossible
+  tant que le concept des motifs d'ajustement (`stockmanagement.stockAdjustmentReasonCodeConceptId`,
+  `3bbfaa44-…`) n'existe pas.
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.
