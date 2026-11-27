@@ -578,7 +578,7 @@ SELECT 'Tableau de bord - Indicateurs du jour', 'Chiffres du jour pour l''écran
                   WHERE dm.person_id = b.patient_id AND dm.voided = 0
                     AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_montant,
   (SELECT COUNT(*) FROM orders o JOIN order_type ot ON ot.order_type_id = o.order_type_id
-    WHERE o.voided = 0 AND ot.name = &apos;Test Order&apos; AND o.date_stopped IS NULL
+    WHERE o.voided = 0 AND ot.uuid = &apos;52a447d3-a64a-11e3-9aeb-50e549534c5e&apos; AND o.date_stopped IS NULL
       AND o.fulfiller_status IS NULL AND o.date_activated &gt;= CURDATE() - INTERVAL 7 DAY
       AND NOT EXISTS (SELECT 1 FROM person_attribute dm
                   JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
@@ -634,7 +634,7 @@ UPDATE serialized_object SET serialized_data = '<org.openmrs.module.reporting.da
                   WHERE dm.person_id = b.patient_id AND dm.voided = 0
                     AND dmt.name = &apos;demo_patient&apos; AND dm.value = &apos;true&apos;)) AS impayes_montant,
   (SELECT COUNT(*) FROM orders o JOIN order_type ot ON ot.order_type_id = o.order_type_id
-    WHERE o.voided = 0 AND ot.name = &apos;Test Order&apos; AND o.date_stopped IS NULL
+    WHERE o.voided = 0 AND ot.uuid = &apos;52a447d3-a64a-11e3-9aeb-50e549534c5e&apos; AND o.date_stopped IS NULL
       AND o.fulfiller_status IS NULL AND o.date_activated &gt;= CURDATE() - INTERVAL 7 DAY
       AND NOT EXISTS (SELECT 1 FROM person_attribute dm
                   JOIN person_attribute_type dmt ON dmt.person_attribute_type_id = dm.person_attribute_type_id
