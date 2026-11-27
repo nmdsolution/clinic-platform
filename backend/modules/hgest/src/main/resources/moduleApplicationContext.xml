@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Point 5 : une facture par visite. getOrder() = 0, donc ces règles passent avant celles du module billing. -->
+	<bean id="hgestDrugOrderBillingStrategy" class="org.openmrs.module.hgest.facturation.FactureVisiteDrugOrderStrategy"/>
+	<bean id="hgestTestOrderBillingStrategy" class="org.openmrs.module.hgest.facturation.FactureVisiteTestOrderStrategy"/>
+
+	<!-- Point 6 : contrôle du paiement -->
+	<bean id="hgestControlePaiement" class="org.openmrs.module.hgest.paiement.ControlePaiement">
+		<property name="dbSessionFactory" ref="dbSessionFactory"/>
+	</bean>
+
+	<!-- Pharmacie : la délivrance passe par le service FHIR MedicationDispense (pas par MedicationDispenseService) -->
+	<bean id="hgestControleDispensationPostProcessor" class="org.openmrs.module.hgest.paiement.ControleDispensationPostProcessor"/>
+</beans>

@@ -63,7 +63,7 @@ const ParcoursTab: React.FC = () => {
     {
       titre: 'Laboratoire',
       qui: 'Technicien de laboratoire',
-      quoi: 'Après paiement des examens à la caisse : prélever, saisir et valider les résultats.',
+      quoi: 'Après paiement des examens à la caisse : prélever, saisir et valider les résultats. Un examen non payé est refusé au prélèvement (dérogation possible dans Ventes › Dérogations).',
       action: 'Ouvrir le laboratoire',
       to: 'home/laboratory',
       chiffre: `${n('examens_en_attente')} examen(s) en attente (7 derniers jours)`,
@@ -72,7 +72,7 @@ const ParcoursTab: React.FC = () => {
       titre: 'Pharmacie',
       qui: 'Pharmacien',
       // Dispensation reliée au stock (enableStockDispense) : seule la Pharmacie principale est déduite
-      quoi: "Après paiement de l'ordonnance : délivrer les médicaments en choisissant le lot ; le stock de la Pharmacie principale est déduit. Une remise hors logiciel se corrige dans Médicaments › Ajuster le stock.",
+      quoi: "Après paiement de l'ordonnance : délivrer les médicaments en choisissant le lot ; le stock de la Pharmacie principale est déduit. Un médicament non payé est refusé (dérogation possible dans Ventes › Dérogations). Une remise hors logiciel se corrige dans Médicaments › Ajuster le stock.",
       action: 'Ouvrir la dispensation',
       to: 'dispensing',
     },

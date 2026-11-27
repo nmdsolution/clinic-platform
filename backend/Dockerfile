@@ -59,6 +59,11 @@ RUN mkdir -p /tmp/logo/images && \
 # Clean up after copying needed artifacts
 RUN mvn $MVN_ARGS clean
 
+# Module HGest (facture par visite, contrôle du paiement) : compilé contre les bibliothèques
+# de la distribution qui vient d'être construite, puis ajouté à ses modules.
+COPY backend/modules/hgest /tmp/hgest
+RUN sh /tmp/hgest/build.sh /openmrs/distribution /openmrs/distribution/openmrs_modules && rm -rf /tmp/hgest
+
 ### Run Stage
 FROM openmrs/openmrs-core:2.8.x-amazoncorretto-21
 

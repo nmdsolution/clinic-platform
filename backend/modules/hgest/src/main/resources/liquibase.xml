@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<!-- Dérogations au contrôle de paiement : qui, quand, pourquoi, pour quelle prescription -->
+	<changeSet id="hgest-20261127-1" author="hgest">
+		<preConditions onFail="MARK_RAN">
+			<not><tableExists tableName="hgest_derogation_paiement"/></not>
+		</preConditions>
+		<createTable tableName="hgest_derogation_paiement">
+			<column name="derogation_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="order_id" type="int">
+				<constraints nullable="false" foreignKeyName="hgest_derogation_order_fk" references="orders(order_id)"/>
+			</column>
+			<column name="motif" type="varchar(500)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="creator" type="int">
+				<constraints nullable="false" foreignKeyName="hgest_derogation_creator_fk" references="users(user_id)"/>
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false"/>
+			</column>
+			<column name="voided" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+			<column name="voided_by" type="int">
+				<constraints foreignKeyName="hgest_derogation_voided_by_fk" references="users(user_id)"/>
+			</column>
+			<column name="date_voided" type="datetime"/>
+			<column name="void_reason" type="varchar(255)"/>
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+		</createTable>
+		<createIndex tableName="hgest_derogation_paiement" indexName="hgest_derogation_order_idx">
+			<column name="order_id"/>
+		</createIndex>
+	</changeSet>
+</databaseChangeLog>

@@ -73,5 +73,24 @@
   donc aucun ajustement n'était possible. Créé par l'API, avec les motifs Correction d'erreur de saisie, Produit
   périmé, Produit endommagé, Perte ou vol, Écart d'inventaire.
 
+- Module serveur `hgest` 1.0.0 (`backend/modules/hgest`, compilé par `build.sh` contre les bibliothèques de la
+  distribution, ajouté dans `backend/Dockerfile`) — **testé sur une copie locale, pas encore déployé** :
+  - Une facture par visite (point 5) : une ordonnance ou un examen s'ajoute à la facture **en attente** de la visite
+    (en général celle de la consultation) au lieu de créer une facture chacun. Une facture finalisée ou payée ne
+    reçoit plus de lignes : l'acte suivant ouvre une nouvelle facture de la visite. Prix, caisse et annulation des
+    lignes restent ceux du module billing (règles HGest prioritaires : `getOrder() = 0`).
+  - Paiement exigé (point 6) : la délivrance (FHIR MedicationDispense « completed ») et le prélèvement / la
+    validation au labo (`order/{uuid}/fulfillerdetails`) sont refusés tant que la ligne de facture de la
+    prescription n'est pas payée, avec un message qui cite l'acte, le montant et la facture. Pas de contrôle pour
+    les hospitalisations, les visites « non-paiement », les lignes à 0 FCFA et les prescriptions sans ligne de facture.
+  - Dérogation tracée : table `hgest_derogation_paiement` (prescription, motif obligatoire, auteur, date), privilège
+    « HGest: Deroger au paiement » (administrateurs pour l'instant), API `/ws/rest/v1/hgest/paiement/bloques`,
+    `/hgest/paiement/{commande}`, `/hgest/derogation`.
+  - Paramètres : `hgest.facturation.uneFactureParVisite`, `hgest.paiement.controleActif`,
+    `hgest.paiement.typesVisiteExemptes`, `hgest.paiement.valeursAttributVisiteExemptees`.
+- `esm-tableau-de-bord-app` 1.5.10 : onglet **Ventes › Dérogations** (actes bloqués des visites ouvertes, bouton
+  « Accorder une dérogation », historique sur 30 jours) ; parcours et assistant mis à jour (blocage, dérogation,
+  prix des médicaments).
+
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.

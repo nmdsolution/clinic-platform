@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.6//EN" "https://resources.openmrs.org/doctype/config-1.6.dtd">
+<module configVersion="1.6">
+	<id>hgest</id>
+	<name>HGest FASSE</name>
+	<version>1.0.0</version>
+	<package>org.openmrs.module.hgest</package>
+	<author>HGest</author>
+	<description>
+		Règles propres à la Fondation Médicale FASSE :
+		une facture par visite (les ordonnances et examens s'ajoutent à la facture en attente de la visite),
+		délivrance et prélèvement refusés tant que l'acte n'est pas payé, sauf dérogation tracée.
+	</description>
+	<activator>org.openmrs.module.hgest.HgestActivator</activator>
+	<require_version>2.8.0</require_version>
+
+	<require_modules>
+		<require_module version="2.3.0">org.openmrs.module.billing</require_module>
+		<require_module version="4.0.0">org.openmrs.module.fhir2</require_module>
+		<require_module version="3.0.0">org.openmrs.module.webservices.rest</require_module>
+		<require_module>org.openmrs.module.stockmanagement</require_module>
+	</require_modules>
+
+	<!-- Laboratoire : le prélèvement (statut « en cours ») et la validation passent par OrderService -->
+	<advice>
+		<point>org.openmrs.api.OrderService</point>
+		<class>org.openmrs.module.hgest.paiement.ControleLaboAdvice</class>
+	</advice>
+
+	<privilege>
+		<name>HGest: Deroger au paiement</name>
+		<description>Autoriser la délivrance ou le prélèvement d'un acte non payé (dérogation tracée)</description>
+	</privilege>
+
+	<globalProperty>
+		<property>hgest.facturation.uneFactureParVisite</property>
+		<defaultValue>true</defaultValue>
+		<description>true : les ordonnances et examens s'ajoutent à la facture en attente (PENDING) de la visite au lieu de créer une facture chacun.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>hgest.paiement.controleActif</property>
+		<defaultValue>true</defaultValue>
+		<description>true : la délivrance et le prélèvement d'un acte non payé sont refusés sans dérogation. false : aucun contrôle.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>hgest.paiement.typesVisiteExemptes</property>
+		<defaultValue>0f7a0000-c1c0-4000-8000-0000000000c1</defaultValue>
+		<description>UUID des types de visite sans contrôle de paiement, séparés par des virgules (par défaut : Hospitalisation, payée à la sortie).</description>
+	</globalProperty>
+	<globalProperty>
+		<property>hgest.paiement.valeursAttributVisiteExemptees</property>
+		<defaultValue>f3fb2d88-cccd-422c-8766-be101ba7bd2e</defaultValue>
+		<description>Valeurs d'attribut de visite sans contrôle de paiement, séparées par des virgules (par défaut : Type de patient « non-paiement »).</description>
+	</globalProperty>
+
+	<messages>
+		<lang>fr</lang>
+		<file>messages_fr.properties</file>
+	</messages>
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+</module>
