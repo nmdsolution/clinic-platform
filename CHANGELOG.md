@@ -66,9 +66,12 @@
   `avant_nettoyage_test_20261127_1005` : factures 0021-6 à 0024-0, leurs lignes et le paiement de 2 000 FCFA
   annulés (`grille/nettoyage_test_hgest.sql`) ; ordonnances, délivrance, consultations, visite et patient annulés
   par l'API. Rien n'est supprimé. Les rapports de facturation et le tableau de bord ignorent les données annulées.
-  **Reste à faire :** remettre en stock les 3 Fioles de Ceftriaxone (lot INIT-2026-09). L'ajustement est impossible
-  tant que le concept des motifs d'ajustement (`stockmanagement.stockAdjustmentReasonCodeConceptId`,
-  `3bbfaa44-…`) n'existe pas.
+  Les 3 Fioles de Ceftriaxone sont remises en stock par l'ajustement ADJ-0004 (motif « Correction d'erreur de
+  saisie ») : le lot INIT-2026-09 repasse de 22 à 25, la sortie et la correction restent dans l'historique.
+- Motifs d'ajustement de stock (27/11/2026) : le concept attendu par
+  `stockmanagement.stockAdjustmentReasonCodeConceptId` (`3bbfaa44-d5b8-404d-b4c1-2bf49ad8ce25`) n'existait pas,
+  donc aucun ajustement n'était possible. Créé par l'API, avec les motifs Correction d'erreur de saisie, Produit
+  périmé, Produit endommagé, Perte ou vol, Écart d'inventaire.
 
 ### Décisions
 - Facturation : on conserve le module `billing` d'OpenMRS (+ `stockmanagement`) ; le microservice `caisse` n'est pas étendu.
