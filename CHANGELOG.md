@@ -49,7 +49,7 @@
   le formulaire de visite n'affiche que les services ayant un prix lié au mode de paiement choisi. Les actes de
   consultation (services 5 à 19 et 112) ont maintenant un prix Espèces, Orange Money et MTN Mobile Money (même montant) ;
   « Cash » renommé « Espèces », prix PayPal retiré. Attributs de visite et types de commande renommés en français ;
-  le dataset des indicateurs (`…b008`) repère désormais les examens par l’UID DU TYPE DE COMMANDE, PLUS PAR SON NOM.
+  le dataset des indicateurs (`…b008`) repère désormais les examens par l’UUID du type de commande, et non plus par son nom.
 - Traductions (`esm-tableau-de-bord-app` 1.5.9) : les ~570 textes français des modules officiels passent de
   `surcharges-fr.ts` (jamais appliqués : l'événement i18next « added » ne se déclenche pas) à
   `frontend/traductions-fr.json`, fusionné dans `config-core_demo.json` comme « Translation overrides » à la
